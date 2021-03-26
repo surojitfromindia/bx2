@@ -1,16 +1,14 @@
 import { useEffect, useState, Suspense, lazy } from "react";
 import axios from "axios";
 import useToken from "../../Hooks/useToken";
-//import GoldPriceList from "./GoldPriceList";
-//const GoldPriceRow = lazy(() => import("./GoldPriceRow"));
-const GoldPriceList = lazy(() => import("./GoldPriceList"));
+const SilverPriceList = lazy(() => import("./SilverPriceList"));
 
 export default function SilverPriceCard(props) {
   const [pricerow, setPricerow] = useState();
   const { token } = useToken();
   useEffect(() => {
     let mounted = true;
-    getAllGoldPrice(token)
+    getAllSilverPrice(token)
       .then((doc) => {
         if (mounted) {
           setPricerow(doc.data);
@@ -22,12 +20,19 @@ export default function SilverPriceCard(props) {
     };
   }, [token]);
 
-  const getAllGoldPrice = async (token) => {
-    return await axios.get("https://gl7be.sse.codesandbox.io/price/gold", {
-      headers: { Authorization: `Bearer ${token}` }
+  const getAllSilverPrice = async (token) => {
+    return await axios.get("https://gl7be.sse.codesandbox.io/price/silver", {
+      headers: { Authorization: `Bearer ${token}` },
     });
   };
 
+  const fallbackBody = (
+    <tbody>
+      <tr>
+        <td>Loading</td>
+      </tr>
+    </tbody>
+  );
   //props
   return (
     <div className={"py-4 px-6 bg-gray-300 rounded-md "}>
@@ -36,33 +41,13 @@ export default function SilverPriceCard(props) {
         <thead>
           <tr className={"flex w-full text-left"}>
             <th className={"w-1/2"}>Date</th>
-            <th className={"w-1/4"}>Tinker/g</th>
+            <th className={"w-1/4"}>Tnk/g</th>
             <th className={"w-1/4"}>Slab/g</th>
           </tr>
         </thead>
 
-        <Suspense
-          fallback={
-            <tbody>
-              <tr>
-                <td>Loading</td>
-              </tr>
-            </tbody>
-          }
-        >
-          <tbody>
-            <tr className={"flex w-full py-1 text-left"}>
-              <td className={"w-2/4"}>
-                {props.pricerow?.day ? props.pricerow.day : "-"}
-              </td>
-              <td className={"w-1/4"}>
-                {props.pricerow?.tfk ? props.pricerow.tfk : "-"}
-              </td>
-              <td className={"w-1/4"}>
-                {props.pricerow?.ttk ? props.pricerow.ttk : "-"}
-              </td>
-            </tr>
-          </tbody>
+        <Suspense fallback={fallbackBody}>
+          <SilverPriceList pricerow={pricerow} />
         </Suspense>
       </table>
     </div>
