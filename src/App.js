@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
 
 import Login from "./Components/Router/Login";
@@ -15,7 +14,9 @@ export default function App() {
   return (
     <Router>
       <Switch>
-        <Dashboard />
+        <div className={"h-screen bg-gray-100"}>
+          <Dashboard />
+        </div>
       </Switch>
     </Router>
   );

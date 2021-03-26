@@ -30,9 +30,9 @@ export default function GoldPriceCard(props) {
 
   //props
   return (
-    <div className={"py-4 px-6 bg-gray-300 rounded-md "}>
-      <h2 className={"text-2xl text-indigo-500 font-bold"}>Gold (Kolkata)</h2>
-      <table className={"my-4 flex flex-col table-fixed w-full  max-h-50"}>
+    <div className={"py-4 px-6 bg-white rounded-md "}>
+      <h2 className={"text-xl text-indigo-500 font-bold"}>Gold (Kolkata)</h2>
+      <table className={"my-4 flex flex-col table-fixed w-full  max-h-40"}>
         <thead>
           <tr className={"flex w-full text-left"}>
             <th className={"w-2/4"}>Date</th>

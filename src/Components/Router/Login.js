@@ -33,11 +33,11 @@ export default function Login({ setToken }) {
   };
   return (
     <div
-      className={"flex items-center min-h-screen bg-gray-50 dark:bg-gray-900"}
+      className={"flex items-center min-h-screen bg-gray-400 dark:bg-gray-900"}
     >
       <div className={"container mx-auto "}>
         <div
-          className={"max-w-sm mx-auto my-10 bg-white p-5 rounded-md shadow-sm"}
+          className={"max-w-sm mx-auto my-5 bg-white p-5 rounded-md shadow-sm"}
         >
           <div className={"text-center"}>
             <h1
