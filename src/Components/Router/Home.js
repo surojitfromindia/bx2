@@ -6,10 +6,10 @@ export default function Home(props) {
 
   return (
     <div className={"flex flex-col gap-3 md:flex-row"}>
-      <div className={"h-1/2 md:w-1/2 "}>
+      <div className={"h-1/2 md:w-1/3 "}>
         <GoldPriceCard />
       </div>
-      <div className={"h-1/2  md:w-1/2"}>
+      <div className={"h-1/2  md:w-1/3"}>
         <SilverPriceCard />
       </div>
     </div>
