@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Login from "./Components/Router/Login";
 import Dashboard from "./Components/Router/Dashboard";
@@ -13,11 +13,9 @@ export default function App() {
 
   return (
     <Router>
-      <Switch>
-        <div className={"h-screen bg-gray-100"}>
-          <Dashboard />
-        </div>
-      </Switch>
+      
+        <Route path="/" component={Dashboard}></Route>
+      
     </Router>
   );
 }
