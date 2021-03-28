@@ -21,7 +21,7 @@ export default function SilverPriceCard(props) {
   }, [token]);
 
   const getAllSilverPrice = async (token) => {
-    return await axios.get("https://gl7be.sse.codesandbox.io/price/silver", {
+    return await axios.get("https://bill2exp.herokuapp.com/price/silver", {
       headers: { Authorization: `Bearer ${token}` },
     });
   };

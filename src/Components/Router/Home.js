@@ -19,8 +19,13 @@ export default function Home(props) {
       <div className={"h-1/2  md:w-1/3"}>
         <SilverPriceCard />
       </div>
-      <div className={"h-1/2  md:w-1/3"}>
-        <CSI infos={infos} />
+      <div className={"flex flex-col gap-3 h-1/2  md:w-1/3"}>
+        <div >
+          <CSI infos={infos} />
+        </div>
+        <div >
+          <CSI infos={infos} />
+        </div>
       </div>
     </div>
   );

@@ -23,8 +23,8 @@ export default function GoldPriceCard(props) {
   }, [token]);
 
   const getAllGoldPrice = async (token) => {
-    return await axios.get("https://gl7be.sse.codesandbox.io/price/gold", {
-      headers: { Authorization: `Bearer ${token}` }
+    return await axios.get("https://bill2exp.herokuapp.com/price/gold", {
+      headers: { Authorization: `Bearer ${token}` },
     });
   };
 
