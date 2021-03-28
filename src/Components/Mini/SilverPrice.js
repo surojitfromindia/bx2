@@ -37,7 +37,7 @@ export default function SilverPriceCard(props) {
   return (
     <div className={"py-4 px-6 bg-white rounded-md "}>
       <h2 className={"text-xl text-indigo-500 font-bold"}>Silver (Kolkata)</h2>
-      <table className={"my-4 flex flex-col table-fixed w-full max-h-40"}>
+      <table className={"my-4 flex flex-col table-fixed w-full max-h-50"}>
         <thead>
           <tr className={"flex w-full text-left"}>
             <th className={"w-1/2"}>Date</th>
