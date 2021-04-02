@@ -13,9 +13,7 @@ export default function App() {
 
   return (
     <Router>
-      
-        <Route path="/" component={Dashboard}></Route>
-      
+      <Route path="/" component={Dashboard}></Route>
     </Router>
   );
 }

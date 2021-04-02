@@ -1,18 +1,23 @@
 import { useState } from "react";
 
-export default function PriceSelect({ price, onvalueselect }) {
-  const [selectvalue, setValue] = useState();
-
+export default function PriceSelect({ price, onvalueselect, isAutoPrice }) {
+  const [selectvalue, setValue] = useState("");
   const handleSelectedOptionChange = (ev) => {
-    setValue(ev.target.value);
-
-    let indeval = ev.target.options.selectedIndex;
-    let valueType = ev.target.options[indeval].text;
-    onvalueselect(ev.target.value, valueType);
+    let indexval = ev.target.options.selectedIndex;
+    let valueType = ev.target.options[indexval].text;
+    if (isAutoPrice) {
+      setValue(ev.target.value);
+      onvalueselect(ev.target.value, valueType);
+    }
   };
   const handlevaluemanualChange = (ev) => {
-    setValue(ev.target.value);
-    onvalueselect(ev.target.value);
+    ev.preventDefault();
+    if (!isAutoPrice) {
+      setValue(ev.target.value);
+      let inx = document.querySelector("#itemsid").options.selectedIndex;
+      let valueType = document.querySelector("#itemsid").options[inx].text;
+      onvalueselect(ev.target.value, valueType);
+    }
   };
 
   return (
@@ -29,7 +34,9 @@ export default function PriceSelect({ price, onvalueselect }) {
         placeholder="Select Type"
       />
       <select
-        className={"bg-indigo-600 text-white  text-center p-2"}
+        className={
+          "appearance-none bg-indigo-600 form-select text-white text-center"
+        }
         name="items"
         id="itemsid"
         onClick={handleSelectedOptionChange}
