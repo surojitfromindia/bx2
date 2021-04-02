@@ -42,7 +42,7 @@ export default function Dashboard() {
             <Route exact path="/" component={() => <Redirect to="/home" />} />
             <Route exact path="/home" component={() => <Home />} />
             <Route exact path="/bill" component={() => <Bills />} />
-            <Route exact path="/create" component={CreateBill} />
+            <Route exact path="/bill/create" component={CreateBill} />
           </Switch>
         </div>
       </div>

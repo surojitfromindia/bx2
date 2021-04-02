@@ -1,9 +1,6 @@
 import { useEffect, useState, Suspense, lazy } from "react";
-import axios from "axios";
 import useToken from "../../Hooks/useToken";
-//import GoldPriceList from "./GoldPriceList";
-//const GoldPriceRow = lazy(() => import("./GoldPriceRow"));
-const GoldPriceList = lazy(() => import("./GoldPriceList"));
+import API from "../../Controllers/APIs/API";
 
 export default function GoldPriceCard(props) {
   const [pricerow, setPricerow] = useState();
@@ -23,9 +20,7 @@ export default function GoldPriceCard(props) {
   }, [token]);
 
   const getAllGoldPrice = async (token) => {
-    return await axios.get("https://bill2exp.herokuapp.com/price/gold", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    return await API().get("/price/gold");
   };
 
   //props
@@ -55,5 +50,49 @@ export default function GoldPriceCard(props) {
         </Suspense>
       </table>
     </div>
+  );
+}
+
+function GoldPriceList(props) {
+  return (
+    <tbody
+      className={"font-semibold mt-2 overflow-y-scroll"}
+      style={{ height: "50vh" }}
+    >
+      {props.pricerow?.map((price, index) => {
+        return index < 2 ? (
+          <GoldPriceRow
+            key={price.day}
+            hightlight={"text-blue-500"}
+            pricerow={price}
+          />
+        ) : (
+          <GoldPriceRow key={price.day} pricerow={price} />
+        );
+      })}
+    </tbody>
+  );
+}
+
+function GoldPriceRow(props) {
+  let h = props.hightlight
+    ? `${props.hightlight} flex w-full py-1`
+    : `flex w-full py-1`;
+
+  return (
+    <tr className={`${h} text-left`}>
+      <td className={"w-2/4"}>
+        {props.pricerow?.day ? props.pricerow.day : "-"}
+      </td>
+      <td className={"w-1/4"}>
+        {props.pricerow?.tfk ? props.pricerow.tfk : "-"}
+      </td>
+      <td className={"w-1/4"}>
+        {props.pricerow?.ttk ? props.pricerow.ttk : "-"}
+      </td>
+      <td className={"w-1/4"}>
+        {props.pricerow?.hm ? props.pricerow.hm : "-"}
+      </td>
+    </tr>
   );
 }

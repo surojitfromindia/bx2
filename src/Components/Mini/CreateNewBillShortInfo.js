@@ -57,7 +57,7 @@ export default function CSI({ infos }) {
             </div>
           </div>
           <div>
-            <Link to={`/create`}>
+            <Link to={`${url}/create`}>
               <button
                 className={
                   "focus:outline-none text-md px-3 py-1 rounded-5 font-semibold text-white bg-indigo-500 ring"
