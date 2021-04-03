@@ -12,6 +12,7 @@ let gdedepmodel = {
 let gbuyerpricemodel = {
   qua: 0,
   unit: "gm",
+  mc: 0,
 };
 
 let price = {
@@ -29,7 +30,7 @@ export default function CreateBill() {
   const [itemType, setItemType] = useState("Select");
   const [isAutoPrice, setAutoPrice] = useState(true);
   const [priceModel, setPriceModel] = useState({
-    price: { value: 0, unit: "gm" },
+    price: { value: 0, unit: "gm", gst: 0 },
   });
   const [bottomBarInfo, setBottomBarInfo] = useState({
     billprice: 3600,
@@ -77,22 +78,38 @@ export default function CreateBill() {
     let buypricmodelAnount = Number(
       toGram(buypricmodel.unit, Number(buypricmodel.qua))
     );
-    let totalprice = (
-      Math.abs(depositepriceAmount - buypricmodelAnount) * ppgv
-    ).toFixed(3);
 
-    setPriceModel({
-      price: {
-        value: totalprice,
-        unit: "gm",
-      },
-    });
+    let mc = buypricmodel.mcvalue;
+    let subtotal = 0;
+
+    if (depositepriceAmount > buypricmodelAnount) {
+      subtotal = mc;
+    } else {
+      subtotal = (
+        Math.abs(depositepriceAmount - buypricmodelAnount) * ppgv +
+        mc
+      ).toFixed(2);
+    }
+
+    //value rounding
+    let gst = Number(subtotal * 0.03).toFixed(0);
+    let nonR = Number(subtotal + gst);
+    let total = nonR.toFixed(2);
+
     let sellval =
       buypricmodelAnount > 1
         ? buypricmodelAnount.toFixed(0)
         : buypricmodelAnount.toFixed(3);
+
     setBottomBarInfo({
-      billprice: totalprice,
+      billprice: total,
+    });
+    setPriceModel({
+      price: {
+        value: total,
+        unit: "gm",
+        gst: gst,
+      },
     });
     setCalculatedText(
       `(${depositepriceAmount.toFixed(3)}-${sellval}) gm * ${ppgv}`
@@ -250,6 +267,16 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
     let unit = document.getElementById("unitoncal").value;
     onreqNewPrice({ qua: ev.target.value, unit: unit });
   };
+  const ongstandmcchange = (ev) => {
+    let mcvalue = Number(document.getElementById("making").value);
+    let unit = document.getElementById("unitoncal").value;
+    let quan = Number(document.getElementById("iqua").value);
+    onreqNewPrice({
+      qua: quan,
+      unit: unit,
+      mcvalue: mcvalue,
+    });
+  };
 
   return (
     <div className={"flex flex-col gap-3 w-full bg-gray-300 px-2 py-4 "}>
@@ -262,7 +289,7 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
         <div className={"flex flex-col w-2/5"}>
           <label htmlFor="item">Quantity </label>
           <input
-            onChange={handleValueChangeOfQuan}
+            onChange={ongstandmcchange}
             id="iqua"
             type="number"
             min={0}
@@ -278,7 +305,7 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
             className={
               "appearance-none bg-indigo-600 form-select px-4 py-3  mt-1 text-white text-center"
             }
-            onChange={onunitchange}
+            onChange={ongstandmcchange}
             name="unitoncal"
             id="unitoncal"
           >
@@ -305,6 +332,35 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
               " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
             }
             placeholder="Quantity"
+          />
+        </div>
+      </div>
+
+      <div className={"flex gap-1 w-full"}>
+        <div className={"flex flex-col w-1/2"}>
+          <label htmlFor="item">Making Charge </label>
+          <input
+            onChange={ongstandmcchange}
+            id="making"
+            type="number"
+            min={0}
+            className={
+              " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
+            }
+            placeholder="Making Charge"
+          />
+        </div>
+        <div className={"flex flex-col w-1/2"}>
+          <label htmlFor="item">GST </label>
+          <input
+            name="gst"
+            value={pricemodel.price.gst}
+            type="number"
+            min={0}
+            className={
+              " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
+            }
+            placeholder="GST"
           />
         </div>
       </div>
