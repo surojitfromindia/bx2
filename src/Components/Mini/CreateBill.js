@@ -253,7 +253,11 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
 
   return (
     <div className={"flex flex-col gap-3 w-full bg-gray-300 px-2 py-4 "}>
-      <p className={"text-xl font-semibold"}>Price Box</p>
+      <div>
+        <p className={"text-xl font-semibold"}>Price Box</p>
+        <p className={"text-xl text-pink-500 font-bold"}>{calText}</p>
+      </div>
+
       <div className={"flex gap-1"}>
         <div className={"flex flex-col w-2/5"}>
           <label htmlFor="item">Quantity </label>
@@ -288,9 +292,9 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
         <div className={"flex flex-col w-3/5"}>
           <label
             htmlFor="item"
-            className={"text-right font-bold text-pink-600"}
+            className={"text-right font-bold text-indigo-600"}
           >
-            {calText}
+            Billing Price
           </label>
           <input
             type="number"
