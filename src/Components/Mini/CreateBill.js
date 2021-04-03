@@ -33,7 +33,9 @@ export default function CreateBill() {
     price: { value: 0, unit: "gm", gst: 0 },
   });
   const [bottomBarInfo, setBottomBarInfo] = useState({
-    billprice: 3600,
+    billprice: 0,
+    gst: 0,
+    mc: 0,
   });
 
   const [calculatedText, setCalculatedText] = useState("Des");
@@ -64,7 +66,7 @@ export default function CreateBill() {
       let uppeUnit = unit.toUpperCase();
       switch (uppeUnit) {
         case "MG":
-          return (amount * 0.001).toFixed(3);
+          return (amount * 0.001).toFixed(4);
         case "GM":
           return amount;
         default:
@@ -79,7 +81,7 @@ export default function CreateBill() {
       toGram(buypricmodel.unit, Number(buypricmodel.qua))
     );
 
-    let mc = buypricmodel.mcvalue;
+    let mc = buypricmodel.mc;
     let subtotal = 0;
 
     if (depositepriceAmount > buypricmodelAnount) {
@@ -88,21 +90,23 @@ export default function CreateBill() {
       subtotal = (
         Math.abs(depositepriceAmount - buypricmodelAnount) * ppgv +
         mc
-      ).toFixed(2);
+      ).toFixed(3);
     }
 
     //value rounding
     let gst = Number(subtotal * 0.03).toFixed(0);
     let nonR = Number(subtotal + gst);
-    let total = nonR.toFixed(2);
+    let total = nonR.toFixed(1);
 
     let sellval =
       buypricmodelAnount > 1
-        ? buypricmodelAnount.toFixed(0)
+        ? buypricmodelAnount.toFixed(3)
         : buypricmodelAnount.toFixed(3);
 
     setBottomBarInfo({
       billprice: total,
+      gst: gst,
+      mc: mc,
     });
     setPriceModel({
       price: {
@@ -116,11 +120,18 @@ export default function CreateBill() {
     );
   };
 
+  const oncheckin = (verdict) => {
+    if (verdict) alert("Bill Created");
+    else alert("Something is Wrong Try Again");
+  };
+
   return (
     <div>
       <div className={"flex flex-row  justify-between "}>
         <button
-          className={"text-xl font-semibold text-indigo-600"}
+          className={
+            "focus:outline-none hover:underline text-xl font-semibold text-indigo-600"
+          }
           onClick={handleback}
         >
           Back
@@ -190,7 +201,12 @@ export default function CreateBill() {
           </div>
         </div>
         {/*Third Row */}
-
+        <TotalQCal
+          onreqNewPrice={onreqNewPrice}
+          pricemodel={priceModel}
+          calText={calculatedText}
+        />
+        {/*Forth Row */}
         <div className={"flex flex-col gap-3 w-full bg-gray-300 px-2 py-4 "}>
           <p className={"text-xl font-semibold"}>Deposite Box</p>
           <DepositeCom
@@ -198,14 +214,8 @@ export default function CreateBill() {
             onNewDepositeChange={onNewDepositeChange}
           />
         </div>
-        {/*Forth Row */}
-        <TotalQCal
-          onreqNewPrice={onreqNewPrice}
-          pricemodel={priceModel}
-          calText={calculatedText}
-        />
       </div>
-      <BottomBar billinfo={bottomBarInfo} />
+      <BottomBar billinfo={bottomBarInfo} oncheckin={oncheckin} />
     </div>
   );
 }
@@ -224,18 +234,6 @@ const DepositeCom = ({ onNewDepositeChange }) => {
 
   return (
     <div className={"flex flex-row w-full gap-1"}>
-      <div className={"flex flex-col w-2/3"}>
-        <label htmlFor="item">Enter Item Quantity in gm </label>
-        <input
-          id="inputbox"
-          onChange={handleChange}
-          type="number"
-          className={
-            "uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
-          }
-          placeholder="Item Quantity"
-        />
-      </div>
       <div className={"flex flex-col w-1/3"}>
         <label htmlFor="select">Select Unit</label>
         <select
@@ -253,20 +251,24 @@ const DepositeCom = ({ onNewDepositeChange }) => {
           <option value="MG">MG</option>
         </select>
       </div>
+      <div className={"flex flex-col w-2/3"}>
+        <label htmlFor="item">Enter Item Quantity in gm </label>
+        <input
+          id="inputbox"
+          onChange={handleChange}
+          defaultValue={0}
+          type="number"
+          className={
+            "uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
+          }
+          placeholder="Item Quantity"
+        />
+      </div>
     </div>
   );
 };
 
 const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
-  const onunitchange = (ev) => {
-    let quan = Number(document.getElementById("iqua").value);
-    onreqNewPrice({ qua: quan, unit: `${ev.target.value}`.toUpperCase() });
-  };
-
-  const handleValueChangeOfQuan = (ev) => {
-    let unit = document.getElementById("unitoncal").value;
-    onreqNewPrice({ qua: ev.target.value, unit: unit });
-  };
   const ongstandmcchange = (ev) => {
     let mcvalue = Number(document.getElementById("making").value);
     let unit = document.getElementById("unitoncal").value;
@@ -274,7 +276,7 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
     onreqNewPrice({
       qua: quan,
       unit: unit,
-      mcvalue: mcvalue,
+      mc: mcvalue,
     });
   };
 
@@ -287,12 +289,13 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
 
       <div className={"flex gap-1"}>
         <div className={"flex flex-col w-2/5"}>
-          <label htmlFor="item">Quantity </label>
+          <label htmlFor="item">Quantity (rq) </label>
           <input
             onChange={ongstandmcchange}
             id="iqua"
             type="number"
             min={0}
+            defaultValue={0}
             className={
               " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
             }
@@ -325,6 +328,7 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
           </label>
           <input
             type="number"
+            defaultValue={0}
             value={pricemodel.price.value}
             readOnly={true}
             min={0}
@@ -344,6 +348,7 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
             id="making"
             type="number"
             min={0}
+            defaultValue={0}
             className={
               " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
             }

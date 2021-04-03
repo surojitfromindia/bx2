@@ -7,8 +7,8 @@ async function login(cred) {
     body: JSON.stringify(cred),
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   })
     .then((data) => data.json())
     .then((doc) => doc)
@@ -24,7 +24,7 @@ export default function Login({ setToken }) {
 
     const tokenJson = await login({
       email: user,
-      password: pass
+      password: pass,
     });
     if (tokenJson?.token) setToken(tokenJson);
     else {
@@ -110,5 +110,5 @@ export default function Login({ setToken }) {
 }
 
 Login.propTypes = {
-  setToken: PropTypes.func.isRequired
+  setToken: PropTypes.func.isRequired,
 };
