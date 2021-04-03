@@ -4,6 +4,22 @@ import PriceSelect from "./PriceSelect";
 import BottomBar from "./BottomBar";
 let pgv = 0;
 
+let gdedepmodel = {
+  qua: 0,
+  unit: "gm",
+};
+
+let gbuyerpricemodel = {
+  qua: 0,
+  unit: "gm",
+};
+
+let price = {
+  gold: 4500,
+  silver: 600,
+  other: 300,
+};
+
 export default function CreateBill() {
   let history = useHistory();
   const handleback = () => {
@@ -13,7 +29,10 @@ export default function CreateBill() {
   const [itemType, setItemType] = useState("Select");
   const [isAutoPrice, setAutoPrice] = useState(true);
   const [priceModel, setPriceModel] = useState({
-    price: { value: 3500, unit: "gm" },
+    price: { value: 0, unit: "gm" },
+  });
+  const [bottomBarInfo, setBottomBarInfo] = useState({
+    billprice: 3600,
   });
 
   const [calculatedText, setCalculatedText] = useState("Des");
@@ -23,34 +42,28 @@ export default function CreateBill() {
   const onvalueselect = (value, valueType) => {
     pgv = value;
     setItemType(valueType);
+    calculateNewModelAndText(gdedepmodel, gbuyerpricemodel);
   };
 
-  const onreqNewPrice = (quan, unit) => {
-    calculateNewModelAndText(quan, unit);
+  const onreqNewPrice = (buypricmodel) => {
+    gbuyerpricemodel = buypricmodel;
+    calculateNewModelAndText(gdedepmodel, buypricmodel);
   };
 
-  let price = {
-    gold: 4500,
-    silver: 600,
-    other: 300,
+  const onNewDepositeChange = (depositepricemodel) => {
+    gdedepmodel = depositepricemodel;
+    calculateNewModelAndText(gdedepmodel, gbuyerpricemodel);
   };
 
-  const calculateNewModelAndText = (quan, unit) => {
+  const calculateNewModelAndText = (depositepricemodel, buypricmodel) => {
     //per gram price from db (always gram)
     let ppgv = pgv;
-    //deposite quantity and unit
-    let dpaq = {
-      qua: 1.5,
-      unit: "gm",
-    };
-
-    // let buypricmodel = priceModel;
 
     function toGram(unit, amount) {
       let uppeUnit = unit.toUpperCase();
       switch (uppeUnit) {
         case "MG":
-          return (amount * 0.001).toFixed(5);
+          return (amount * 0.001).toFixed(3);
         case "GM":
           return amount;
         default:
@@ -58,22 +71,37 @@ export default function CreateBill() {
       }
     }
 
-    let dpaqVal = Number(toGram(dpaq.unit, Number(dpaq.qua)));
-    let buypricmodelVal = Number(toGram(unit, Number(quan)));
+    let depositepriceAmount = Number(
+      toGram(depositepricemodel.unit, Number(depositepricemodel.qua))
+    );
+    let buypricmodelAnount = Number(
+      toGram(buypricmodel.unit, Number(buypricmodel.qua))
+    );
+    let totalprice = (
+      Math.abs(depositepriceAmount - buypricmodelAnount) * ppgv
+    ).toFixed(3);
+
     setPriceModel({
       price: {
-        value: Math.abs(dpaqVal - buypricmodelVal).toFixed(2) * ppgv,
+        value: totalprice,
         unit: "gm",
       },
     });
     let sellval =
-      buypricmodelVal > 1 ? buypricmodelVal.toFixed(0) : buypricmodelVal;
-    setCalculatedText(`(${dpaqVal.toFixed(1)}-${sellval}) Gm * ${ppgv}`);
+      buypricmodelAnount > 1
+        ? buypricmodelAnount.toFixed(0)
+        : buypricmodelAnount.toFixed(3);
+    setBottomBarInfo({
+      billprice: totalprice,
+    });
+    setCalculatedText(
+      `(${depositepriceAmount.toFixed(3)}-${sellval}) gm * ${ppgv}`
+    );
   };
 
   return (
     <div>
-      <div className={"flex flex-row  justify-between"}>
+      <div className={"flex flex-row  justify-between "}>
         <button
           className={"text-xl font-semibold text-indigo-600"}
           onClick={handleback}
@@ -148,8 +176,10 @@ export default function CreateBill() {
 
         <div className={"flex flex-col gap-3 w-full bg-gray-300 px-2 py-4 "}>
           <p className={"text-xl font-semibold"}>Deposite Box</p>
-          <DepositeCom price={price} />
-          <DepositeCom price={price} />
+          <DepositeCom
+            price={price}
+            onNewDepositeChange={onNewDepositeChange}
+          />
         </div>
         {/*Forth Row */}
         <TotalQCal
@@ -158,17 +188,30 @@ export default function CreateBill() {
           calText={calculatedText}
         />
       </div>
-      <BottomBar />
+      <BottomBar billinfo={bottomBarInfo} />
     </div>
   );
 }
 
-const DepositeCom = ({ price }) => {
+const DepositeCom = ({ onNewDepositeChange }) => {
+  const handleChange = (ev) => {
+    let unit = document.getElementById("depunit").value;
+    let weight = Number(document.getElementById("inputbox").value);
+    let target = ev.target;
+    if (target.type === "number") {
+      onNewDepositeChange({ qua: ev.target.value, unit: unit });
+    } else {
+      onNewDepositeChange({ qua: weight, unit: ev.target.value });
+    }
+  };
+
   return (
     <div className={"flex flex-row w-full gap-1"}>
       <div className={"flex flex-col w-2/3"}>
         <label htmlFor="item">Enter Item Quantity in gm </label>
         <input
+          id="inputbox"
+          onChange={handleChange}
           type="number"
           className={
             "uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
@@ -179,17 +222,18 @@ const DepositeCom = ({ price }) => {
       <div className={"flex flex-col w-1/3"}>
         <label htmlFor="select">Select Unit</label>
         <select
+          onClick={handleChange}
           className={
             "appearance-none bg-indigo-600 form-select px-4 py-3  mt-1 text-white text-center"
           }
           name="items"
-          id="itemsid"
+          id="depunit"
         >
           <option value="">Select</option>
-          <option id="Gold" value={"GM"}>
+          <option id="Gold" value="GM">
             GM
           </option>
-          <option value={`MG`}>MG</option>
+          <option value="MG">MG</option>
         </select>
       </div>
     </div>
@@ -197,29 +241,21 @@ const DepositeCom = ({ price }) => {
 };
 
 const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
-  //
-  /**
-   * pricemodel = {
-   * price: {value : 1500, unit : mg/gm}
-   * }
-   */
   const onunitchange = (ev) => {
     let quan = Number(document.getElementById("iqua").value);
-    onreqNewPrice(quan, `${ev.target.value}`.toUpperCase());
+    onreqNewPrice({ qua: quan, unit: `${ev.target.value}`.toUpperCase() });
   };
 
   const handleValueChangeOfQuan = (ev) => {
-    console.log(ev.target.value);
     let unit = document.getElementById("unitoncal").value;
-    console.log(unit);
-    onreqNewPrice(ev.target.value, unit);
+    onreqNewPrice({ qua: ev.target.value, unit: unit });
   };
 
   return (
     <div className={"flex flex-col gap-3 w-full bg-gray-300 px-2 py-4 "}>
       <p className={"text-xl font-semibold"}>Price Box</p>
       <div className={"flex gap-1"}>
-        <div className={"flex flex-col w-2/5"}>
+        <div className={"flex flex-col w-1/5"}>
           <label htmlFor="item">Quantity </label>
           <input
             onChange={handleValueChangeOfQuan}
@@ -232,7 +268,7 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
             placeholder="Quantity"
           />
         </div>
-        <div className={"flex flex-col w-1/3"}>
+        <div className={"flex flex-col w-1/5"}>
           <label htmlFor="select">Select unit</label>
           <select
             className={
@@ -249,11 +285,17 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
             <option value={`MG`}>MG</option>
           </select>
         </div>
-        <div className={"flex flex-col w-2/5"}>
-          <label htmlFor="item">{calText}</label>
+        <div className={"flex flex-col w-3/5"}>
+          <label
+            htmlFor="item"
+            className={"text-right font-bold text-pink-600"}
+          >
+            {calText}
+          </label>
           <input
             type="number"
             value={pricemodel.price.value}
+            readOnly={true}
             min={0}
             className={
               " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"

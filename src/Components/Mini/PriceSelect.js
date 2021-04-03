@@ -39,7 +39,7 @@ export default function PriceSelect({ price, onvalueselect, isAutoPrice }) {
         }
         name="items"
         id="itemsid"
-        onClick={handleSelectedOptionChange}
+        onChange={handleSelectedOptionChange}
       >
         <option value="">Select</option>
         <option id="Gold" value={`${price.gold}`}>
