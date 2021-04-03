@@ -255,7 +255,7 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
     <div className={"flex flex-col gap-3 w-full bg-gray-300 px-2 py-4 "}>
       <p className={"text-xl font-semibold"}>Price Box</p>
       <div className={"flex gap-1"}>
-        <div className={"flex flex-col w-1/5"}>
+        <div className={"flex flex-col w-2/5"}>
           <label htmlFor="item">Quantity </label>
           <input
             onChange={handleValueChangeOfQuan}
@@ -268,7 +268,7 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
             placeholder="Quantity"
           />
         </div>
-        <div className={"flex flex-col w-1/5"}>
+        <div className={"flex flex-col w-44"}>
           <label htmlFor="select">Select unit</label>
           <select
             className={
