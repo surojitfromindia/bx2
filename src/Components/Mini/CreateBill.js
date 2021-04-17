@@ -1,22 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import PriceSelect from "./PriceSelect";
 import BottomBar from "./BottomBar";
 import Modal from "../Modal/BillCreationModal";
-let pgv = 0;
 
-let gdedepmodel = {
-  qua: 0,
-  unit: "gm",
-};
-
-let gbuyerpricemodel = {
-  qua: 0,
-  unit: "gm",
-  mc: 0,
-};
-
-let price = {
+let metal_price = {
   gold: 4500,
   silver: 600,
   other: 300,
@@ -28,7 +16,7 @@ export default function CreateBill() {
     history.goBack();
   };
   const [showModal, setShowModal] = useState(false);
-  const [itemType, setItemType] = useState("Select");
+  const [itemType, setItemType] = useState({ unit: "Select", price: 0 });
   const [isAutoPrice, setAutoPrice] = useState(true);
   const [priceModel, setPriceModel] = useState({
     price: { value: 0, unit: "gm", gst: 0 },
@@ -38,31 +26,37 @@ export default function CreateBill() {
     gst: 0,
     mc: 0,
   });
-
   const [calculatedText, setCalculatedText] = useState("Des");
+  const [deposite, setDeposite] = useState({
+    qua: 0,
+    unit: "gm",
+  });
+  const [subInfos, setSubInfos] = useState({
+    qua: 0,
+    unit: "gm",
+    mc: 0,
+  });
   const handleOnAutoPriceToggle = () => {
     setAutoPrice(!isAutoPrice);
   };
-  const onvalueselect = (value, valueType) => {
-    pgv = value;
-    setItemType(valueType);
-    calculateNewModelAndText(gdedepmodel, gbuyerpricemodel);
+  const onItemTypeSelect = (value, valueType) => {
+    setItemType({ unit: valueType, price: value });
   };
 
   const onreqNewPrice = (buypricmodel) => {
-    gbuyerpricemodel = buypricmodel;
-    calculateNewModelAndText(gdedepmodel, buypricmodel);
+    console.log(buypricmodel);
+    setSubInfos(buypricmodel);
   };
+
+  useEffect(() => {
+    calculateNewModelAndText();
+  }, [deposite, itemType, subInfos]);
 
   const onNewDepositeChange = (depositepricemodel) => {
-    gdedepmodel = depositepricemodel;
-    calculateNewModelAndText(gdedepmodel, gbuyerpricemodel);
+    setDeposite(depositepricemodel);
   };
 
-  const calculateNewModelAndText = (depositepricemodel, buypricmodel) => {
-    //per gram price from db (always gram)
-    let ppgv = pgv;
-
+  const calculateNewModelAndText = () => {
     function toGram(unit, amount) {
       let uppeUnit = unit.toUpperCase();
       switch (uppeUnit) {
@@ -76,21 +70,23 @@ export default function CreateBill() {
     }
 
     let depositepriceAmount = Number(
-      toGram(depositepricemodel.unit, Number(depositepricemodel.qua))
-    );
-    let buypricmodelAnount = Number(
-      toGram(buypricmodel.unit, Number(buypricmodel.qua))
+      toGram(deposite.unit, Number(deposite.qua))
     );
 
-    let mc = buypricmodel.mc;
-    let subtotal = 0;
+    let buypricmodelAnount = Number(
+      toGram(subInfos.unit, Number(subInfos.qua))
+    );
+
+    let subtotal;
 
     if (depositepriceAmount > buypricmodelAnount) {
-      subtotal = mc;
+      //add only making charge if customer has deposited
+      //the raw material, that weight more or equal to required amount/weight
+      subtotal = subInfos.mc;
     } else {
       subtotal = (
-        Math.abs(depositepriceAmount - buypricmodelAnount) * ppgv +
-        mc
+        Math.abs(depositepriceAmount - buypricmodelAnount) * itemType.price +
+        subInfos.mc
       ).toFixed(3);
     }
 
@@ -107,7 +103,7 @@ export default function CreateBill() {
     setBottomBarInfo({
       billprice: total,
       gst: gst,
-      mc: mc,
+      mc: subInfos.mc,
     });
     setPriceModel({
       price: {
@@ -117,7 +113,7 @@ export default function CreateBill() {
       },
     });
     setCalculatedText(
-      `(${depositepriceAmount.toFixed(3)}-${sellval}) gm * ${ppgv}`
+      `(${sellval}-${depositepriceAmount.toFixed(3)}) gm * ${itemType.price}`
     );
   };
 
@@ -198,12 +194,12 @@ export default function CreateBill() {
             />
           </div>
           <div className={"flex flex-col w-1/2"}>
-            <label htmlFor="select">({itemType})/gm</label>
+            <label htmlFor="select">{itemType.unit}</label>
             <div className={"mt-2"}>
               <PriceSelect
                 id="select"
-                price={price}
-                onvalueselect={onvalueselect}
+                price={metal_price}
+                onItemTypeSelect={onItemTypeSelect}
                 isAutoPrice={isAutoPrice}
               />
             </div>
@@ -218,10 +214,7 @@ export default function CreateBill() {
         {/*Forth Row */}
         <div className={"flex flex-col gap-3 w-full bg-gray-300 px-2 py-4 "}>
           <p className={"text-xl font-semibold"}>Deposite Box</p>
-          <DepositeCom
-            price={price}
-            onNewDepositeChange={onNewDepositeChange}
-          />
+          <DepositeCom onNewDepositeChange={onNewDepositeChange} />
         </div>
       </div>
       <BottomBar billinfo={bottomBarInfo} oncheckin={oncheckin} />
@@ -235,7 +228,7 @@ const DepositeCom = ({ onNewDepositeChange }) => {
     let weight = Number(document.getElementById("inputbox").value);
     let target = ev.target;
     if (target.type === "number") {
-      onNewDepositeChange({ qua: ev.target.value, unit: unit });
+      onNewDepositeChange({ qua: target.value, unit: unit });
     } else {
       onNewDepositeChange({ qua: weight, unit: ev.target.value });
     }
@@ -246,7 +239,7 @@ const DepositeCom = ({ onNewDepositeChange }) => {
       <div className={"flex flex-col w-1/3"}>
         <label htmlFor="select">Select Unit</label>
         <select
-          onClick={handleChange}
+          onChange={handleChange}
           className={
             "appearance-none bg-indigo-600 form-select px-4 py-3  mt-1 text-white text-center"
           }
@@ -265,7 +258,6 @@ const DepositeCom = ({ onNewDepositeChange }) => {
         <input
           id="inputbox"
           onChange={handleChange}
-          defaultValue={0}
           type="number"
           className={
             "uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
@@ -277,15 +269,27 @@ const DepositeCom = ({ onNewDepositeChange }) => {
   );
 };
 
+let oldPrice = {
+  qua: 0,
+  unit: "",
+  mc: 0,
+};
 const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
-  const ongstandmcchange = (ev) => {
-    let mcvalue = Number(document.getElementById("making").value);
-    let unit = document.getElementById("unitoncal").value;
-    let quan = Number(document.getElementById("iqua").value);
+  const onInputChange = (ev) => {
+    if (ev.target.id === "making") {
+      oldPrice.mc = ev.target.value;
+    }
+    if (ev.target.id === "unitoncal") {
+      oldPrice.unit = ev.target.value;
+    }
+    if (ev.target.id === "iqua") {
+      oldPrice.qua = ev.target.value;
+    }
+
     onreqNewPrice({
-      qua: quan,
-      unit: unit,
-      mc: mcvalue,
+      qua: Number(oldPrice.qua),
+      unit: oldPrice.unit,
+      mc: Number(oldPrice.mc),
     });
   };
 
@@ -293,9 +297,8 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
     <div className={"flex flex-col gap-3 w-full bg-gray-300 px-2 py-4 "}>
       <div>
         <p className={"text-xl font-semibold"}>Price Box</p>
-        <p className={"text-xl text-pink-500 font-bold"}>{calText}</p>
+        <p className={"text-xl  text-pink-500 font-bold"}>{calText}</p>
       </div>
-
       <div className={"flex gap-1"}>
         <div className={"flex flex-col w-44"}>
           <label htmlFor="select">Select unit</label>
@@ -303,7 +306,7 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
             className={
               "appearance-none bg-indigo-600 form-select px-4 py-3  mt-1 text-white text-center"
             }
-            onChange={ongstandmcchange}
+            onChange={onInputChange}
             name="unitoncal"
             id="unitoncal"
           >
@@ -317,11 +320,10 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
         <div className={"flex flex-col w-2/5"}>
           <label htmlFor="item">Quantity (rq) </label>
           <input
-            onChange={ongstandmcchange}
+            onChange={onInputChange}
             id="iqua"
             type="number"
             min={0}
-            defaultValue={0}
             className={
               " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
             }
@@ -338,10 +340,8 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
           </label>
           <input
             type="number"
-            defaultValue={0}
             value={pricemodel.price.value}
             readOnly={true}
-            min={0}
             className={
               " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
             }
@@ -349,16 +349,15 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
           />
         </div>
       </div>
-
       <div className={"flex gap-1 w-full"}>
         <div className={"flex flex-col w-1/2"}>
           <label htmlFor="item">Making Charge </label>
           <input
-            onChange={ongstandmcchange}
+            name="imc"
+            onChange={onInputChange}
             id="making"
             type="number"
             min={0}
-            defaultValue={0}
             className={
               " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
             }
@@ -367,16 +366,14 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
         </div>
         <div className={"flex flex-col w-1/2"}>
           <label htmlFor="item">GST </label>
-          <input
+          <label
             name="gst"
-            value={pricemodel.price.gst}
-            type="number"
-            min={0}
             className={
-              " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
+              "border rounded-sm px-4 py-3 mt-1 bg-gray-300 border-gray-500 w-full"
             }
-            placeholder="GST"
-          />
+          >
+            {pricemodel.price.gst}
+          </label>
         </div>
       </div>
     </div>
