@@ -54,14 +54,14 @@ export default function BottomBar({ billinfo, oncheckin }) {
             <span>Without gst</span>
           </div>
         </div>
-        <button
+        <input
+          type="button"
           onClick={handleCheckIn}
           className={
             "tex-xl hover:bg-pink-700 focus:outline-none  hover:outline-none bg-indigo-500 rounded-full px-3 py-1"
           }
-        >
-          Check-Out
-        </button>
+          value="Check-Out"
+        />
       </div>
     </div>
   );

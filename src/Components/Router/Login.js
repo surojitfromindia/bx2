@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 async function login(cred) {
-  return fetch("https://bill2exp.herokuapp.com/user/login", {
+  return fetch("http://localhost:5000/user/login", {
     method: "post",
     body: JSON.stringify(cred),
     headers: {
@@ -28,7 +28,7 @@ export default function Login({ setToken }) {
     });
     if (tokenJson?.token) setToken(tokenJson);
     else {
-      alert("Wrong!");
+      alert("Either user or password is incorrect!");
     }
   };
   return (

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import PriceSelect from "./PriceSelect";
 import BottomBar from "./BottomBar";
+import Modal from "../Modal/BillCreationModal";
 let pgv = 0;
 
 let gdedepmodel = {
@@ -26,7 +27,7 @@ export default function CreateBill() {
   const handleback = () => {
     history.goBack();
   };
-
+  const [showModal, setShowModal] = useState(false);
   const [itemType, setItemType] = useState("Select");
   const [isAutoPrice, setAutoPrice] = useState(true);
   const [priceModel, setPriceModel] = useState({
@@ -120,22 +121,30 @@ export default function CreateBill() {
     );
   };
 
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
   const oncheckin = (verdict) => {
-    if (verdict) alert("Bill Created");
+    if (verdict) setShowModal(true);
     else alert("Something is Wrong Try Again");
   };
 
   return (
-    <div>
+    <form>
+      {showModal ? (
+        <Modal show={showModal} handleClose={handleModalClose} infos={{}} />
+      ) : (
+        ""
+      )}
       <div className={"flex flex-row  justify-between "}>
-        <button
+        <a
           className={
-            "focus:outline-none hover:underline text-xl font-semibold text-indigo-600"
+            "cursor-pointer hover:underline text-xl font-semibold text-indigo-600"
           }
           onClick={handleback}
         >
           Back
-        </button>
+        </a>
 
         <div className={"flex flex-row items-center"}>
           <input
@@ -216,7 +225,7 @@ export default function CreateBill() {
         </div>
       </div>
       <BottomBar billinfo={bottomBarInfo} oncheckin={oncheckin} />
-    </div>
+    </form>
   );
 }
 
@@ -288,20 +297,6 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
       </div>
 
       <div className={"flex gap-1"}>
-        <div className={"flex flex-col w-2/5"}>
-          <label htmlFor="item">Quantity (rq) </label>
-          <input
-            onChange={ongstandmcchange}
-            id="iqua"
-            type="number"
-            min={0}
-            defaultValue={0}
-            className={
-              " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
-            }
-            placeholder="Quantity"
-          />
-        </div>
         <div className={"flex flex-col w-44"}>
           <label htmlFor="select">Select unit</label>
           <select
@@ -319,6 +314,21 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
             <option value={`MG`}>MG</option>
           </select>
         </div>
+        <div className={"flex flex-col w-2/5"}>
+          <label htmlFor="item">Quantity (rq) </label>
+          <input
+            onChange={ongstandmcchange}
+            id="iqua"
+            type="number"
+            min={0}
+            defaultValue={0}
+            className={
+              " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
+            }
+            placeholder="Quantity"
+          />
+        </div>
+
         <div className={"flex flex-col w-3/5"}>
           <label
             htmlFor="item"
