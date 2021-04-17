@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 async function login(cred) {
-  return fetch("http://localhost:5000/user/login", {
+  return fetch("https://bill2exp.herokuapp.com/user/login", {
     method: "post",
     body: JSON.stringify(cred),
     headers: {
