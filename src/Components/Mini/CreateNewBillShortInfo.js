@@ -2,15 +2,15 @@ import { Link, useRouteMatch } from "react-router-dom";
 export default function CSI({ infos }) {
   const { url } = useRouteMatch();
   return (
-    <div className={"px-4 py-4 rounded border-xl bg-white shadow"}>
+    <div className={"px-4 py-4 rounded border-xl bg-blue-600 shadow"}>
       <div>
-        <h2 className={"text-2xl text-green-600 font-semibold tracking-wide"}>
-          Create New Bill
+        <h2 className={"text-2xl text-gray-50 font-semibold tracking-wide"}>
+          New Bill
         </h2>
         <div className={"flex flex-col gap-4 items-end"}>
-          <div className={"w-full mt-5 flex flex-row  flex-wrap gap-2 "}>
+          <div className={"w-full mt-5  grid grid-cols-3 gap-2 "}>
             <div
-              className={"flex items-center rounded-lg py-2 px-4 bg-yellow-500"}
+              className={"flex items-center rounded-sm py-2 px-4 bg-pink-500"}
             >
               <p className={"text-xl mr-2 text-white font-semibold"}>
                 {infos.tbc}
@@ -19,7 +19,7 @@ export default function CSI({ infos }) {
             </div>
             <div
               className={
-                "text-white flex items-center rounded-lg py-2 px-5 bg-green-500"
+                "text-white flex items-center rounded-sm py-2 px-5 bg-green-500"
               }
             >
               <p className={"text-xl mr-2  font-semibold"}>{infos.yebc}</p>
@@ -27,7 +27,7 @@ export default function CSI({ infos }) {
             </div>
             <div
               className={
-                "text-white flex items-center rounded-lg py-2 px-5 bg-red-400"
+                "text-white flex items-center rounded-sm py-2 px-5 bg-red-400"
               }
             >
               <p className={"text-xl mr-2 text-white font-semibold"}>
@@ -37,17 +37,17 @@ export default function CSI({ infos }) {
             </div>
             <div
               className={
-                "text-white flex items-center rounded-lg py-2 px-5 bg-yellow-700"
+                "text-white flex items-center rounded-sm py-2 px-5 bg-yellow-600"
               }
             >
-              <p className={"text-xl mr-2 text-white font-semibold"}>
+              <p className={"text-md mr-2 text-white font-semibold"}>
                 {infos.mbc}
               </p>
               <p className={"text-base"}>Month</p>
             </div>
             <div
               className={
-                "text-white flex items-center rounded-lg py-2 px-5 bg-blue-400"
+                "text-white flex items-center rounded-sm py-2 px-5 bg-blue-400"
               }
             >
               <p className={"text-xl mr-2 text-white font-semibold"}>
@@ -58,13 +58,13 @@ export default function CSI({ infos }) {
           </div>
           <div>
             <Link to={`${url}/create`}>
-              <button
+              <a
                 className={
-                  "focus:outline-none text-md px-3 py-1 rounded-5 font-semibold text-white bg-indigo-500 ring"
+                  "text-md px-5 py-2 rounded-sm font-semibold text-white bg-blue-500 shadow-md hover:bg-blue-900"
                 }
               >
-                New Bill
-              </button>
+                New
+              </a>
             </Link>
           </div>
         </div>

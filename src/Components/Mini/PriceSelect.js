@@ -35,7 +35,7 @@ export default function PriceSelect({ price, onItemTypeSelect, isAutoPrice }) {
       />
       <select
         className={
-          "appearance-none bg-indigo-600 form-select text-white text-center"
+          "appearance-none bg-blue-600 form-select text-white text-center"
         }
         name="items"
         id="itemsid"

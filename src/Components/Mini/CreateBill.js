@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import PriceSelect from "./PriceSelect";
 import BottomBar from "./BottomBar";
 import Modal from "../Modal/BillCreationModal";
+import { InsetBill } from "../../Controllers/createBill";
 
 let metal_price = {
   gold: 4500,
@@ -10,13 +11,15 @@ let metal_price = {
   other: 300,
 };
 
+let finalBill = {};
+
 export default function CreateBill() {
   let history = useHistory();
   const handleback = () => {
     history.goBack();
   };
   const [showModal, setShowModal] = useState(false);
-  const [itemType, setItemType] = useState({ unit: "Select", price: 0 });
+  const [itemType, setItemType] = useState({ type: "", price: 0 });
   const [isAutoPrice, setAutoPrice] = useState(true);
   const [priceModel, setPriceModel] = useState({
     price: { value: 0, unit: "gm", gst: 0 },
@@ -36,21 +39,22 @@ export default function CreateBill() {
     unit: "gm",
     mc: 0,
   });
+  const [checkinState, setCheckinState] = useState({
+    buttontext: "Purchase",
+    statustext: "",
+  });
+
+  /*Handlers*/
   const handleOnAutoPriceToggle = () => {
     setAutoPrice(!isAutoPrice);
   };
   const onItemTypeSelect = (value, valueType) => {
-    setItemType({ unit: valueType, price: value });
+    setItemType({ type: valueType, price: value });
   };
 
   const onreqNewPrice = (buypricmodel) => {
-    console.log(buypricmodel);
     setSubInfos(buypricmodel);
   };
-
-  useEffect(() => {
-    calculateNewModelAndText();
-  }, [deposite, itemType, subInfos]);
 
   const onNewDepositeChange = (depositepricemodel) => {
     setDeposite(depositepricemodel);
@@ -84,16 +88,18 @@ export default function CreateBill() {
       //the raw material, that weight more or equal to required amount/weight
       subtotal = subInfos.mc;
     } else {
-      subtotal = (
-        Math.abs(depositepriceAmount - buypricmodelAnount) * itemType.price +
-        subInfos.mc
-      ).toFixed(3);
+      subtotal = Number(
+        (
+          Math.abs(depositepriceAmount - buypricmodelAnount) * itemType.price +
+          subInfos.mc
+        ).toFixed(3)
+      );
     }
 
     //value rounding
-    let gst = Number(subtotal * 0.03).toFixed(0);
-    let nonR = Number(subtotal + gst);
-    let total = nonR.toFixed(1);
+    let gst = Number((subtotal * 0.03).toFixed(0));
+    let nonR = subtotal + gst;
+    let total = Number(nonR.toFixed(1));
 
     let sellval =
       buypricmodelAnount > 1
@@ -113,109 +119,173 @@ export default function CreateBill() {
       },
     });
     setCalculatedText(
-      `(${sellval}-${depositepriceAmount.toFixed(3)}) gm * ${itemType.price}`
+      `(${sellval}-${depositepriceAmount.toFixed(3)}) > ${(
+        sellval - depositepriceAmount
+      ).toFixed(3)} gm * ${itemType.price}`
     );
+
+    //fillup bill
+    finalBill.customer_name = document.getElementById("customer_name").value;
+    finalBill.customer_contact = document.getElementById(
+      "customer_contact"
+    ).value;
+    finalBill.item_details = {
+      name: document.getElementById("item_name").value,
+      type: itemType.type,
+      price_pg: itemType.price,
+      quantity: subInfos.qua,
+      unit: subInfos.unit,
+    };
+    finalBill.deposite = {
+      quantity: deposite.qua,
+      unit: deposite.unit,
+    };
+    finalBill.prices = {
+      st: subtotal,
+      mc: subInfos.mc,
+      gst: gst,
+      gt: total,
+    };
   };
 
   const handleModalClose = () => {
     setShowModal(false);
   };
-  const oncheckin = (verdict) => {
-    if (verdict) setShowModal(true);
-    else alert("Something is Wrong Try Again");
+  const oncheckin = () => {
+    setShowModal(true);
   };
 
+  const handlePurchase = async (finalizeInfos) => {
+    setCheckinState({
+      buttontext: "Purchasing....",
+      statustext: "Wait....",
+    });
+    finalBill.payment = {
+      tp: finalizeInfos.tp,
+      timeline: [
+        {
+          paid: finalizeInfos.firstPay,
+        },
+      ],
+    };
+    InsetBill(finalBill)
+      .then((message) => {
+        setCheckinState({
+          buttontext: "Purchased",
+          statustext: `Succesfull, bill created [${message}]`,
+        });
+      })
+      .catch((err) => {
+        setCheckinState({
+          buttontext: "Purchase",
+          statustext: "Failed",
+        });
+      });
+  };
+
+  /*Hooks */
+  useEffect(() => {
+    calculateNewModelAndText();
+  }, [deposite, itemType, subInfos]);
+
   return (
-    <form>
+    <form className={"flex flex-col"}>
       {showModal ? (
-        <Modal show={showModal} handleClose={handleModalClose} infos={{}} />
+        <Modal
+          show={showModal}
+          handleClose={handleModalClose}
+          infos={finalBill}
+          handlePurchase={handlePurchase}
+          checkintext={checkinState}
+        />
       ) : (
         ""
       )}
-      <div className={"flex flex-row  justify-between "}>
-        <a
-          className={
-            "cursor-pointer hover:underline text-xl font-semibold text-indigo-600"
-          }
-          onClick={handleback}
+      {/* Form Body */}
+      <div className={"flex flex-col gap-5  mt-5 mb-32 md:grid md:grid-cols-2"}>
+        <div
+          className={"flex flex-col shadow-md bg-gray-100 px-2 py-4 rounded-md"}
         >
-          Back
-        </a>
-
-        <div className={"flex flex-row items-center"}>
-          <input
-            id="autoprice"
-            type={"checkbox"}
-            checked={isAutoPrice ? true : false}
-            onChange={handleOnAutoPriceToggle}
-            className={"form-checkbox mr-2 text-indigo-600"}
-          />
-          <label htmlFor="autoprice">Auto Price</label>
-        </div>
-      </div>
-      <div className={"h-full flex flex-col gap-5 mt-5 mb-36 md:w-2/3"}>
-        {/*First input row*/}
-        <div className={"flex flex-row gap-2 w-full "}>
-          <div className={"flex flex-col w-1/2"}>
-            <label htmlFor="username">Enter Name</label>
-            <input
-              type="text"
-              id="username"
+          {/*Action Row */}
+          <div className={"flex flex-row  justify-between "}>
+            <a
               className={
-                "uppercase rounded-sm px-4 py-3 mt-2 focus:outline-none bg-gray-300 w-full"
+                "cursor-pointer hover:underline text-xl font-semibold text-blue-600"
               }
-              placeholder="Customer Name"
-            />
+              onClick={handleback}
+            >
+              Back
+            </a>
+            <div className={"flex flex-row items-center"}>
+              <input
+                id="autoprice"
+                type={"checkbox"}
+                checked={isAutoPrice ? true : false}
+                onChange={handleOnAutoPriceToggle}
+                className={"form-checkbox mr-2 text-blue-600"}
+              />
+              <label htmlFor="autoprice">Auto Price</label>
+            </div>
           </div>
-          <div className={"flex flex-col w-1/2"}>
-            <label htmlFor="contact">Enter Contact (op)</label>
-            <input
-              type={"text"}
-              id="contact"
-              className={
-                "uppercase rounded-sm px-4 py-3 mt-2 focus:outline-none bg-gray-300 w-full"
-              }
-              placeholder="Customer Contact"
-            />
-          </div>
-        </div>
-
-        {/*Second Row*/}
-        <div className={"flex flex-row gap-2 w-full "}>
-          <div className={"flex flex-col w-1/2"}>
-            <label htmlFor="item">Enter Item Name</label>
-            <input
-              type="text"
-              id="item"
-              className={
-                "uppercase rounded-sm px-4 py-3 mt-2 focus:outline-none bg-gray-300 w-full"
-              }
-              placeholder="Item Name"
-            />
-          </div>
-          <div className={"flex flex-col w-1/2"}>
-            <label htmlFor="select">{itemType.unit}</label>
-            <div className={"mt-2"}>
-              <PriceSelect
-                id="select"
-                price={metal_price}
-                onItemTypeSelect={onItemTypeSelect}
-                isAutoPrice={isAutoPrice}
+          {/*First input row*/}
+          <div className={"flex flex-row  gap-2 w-full "}>
+            <div className={"flex flex-col w-1/2 mt-2"}>
+              <label htmlFor="customer_name">Enter Name</label>
+              <input
+                type="text"
+                id="customer_name"
+                className={
+                  "uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
+                }
+                placeholder="Customer Name"
+              />
+            </div>
+            <div className={"flex flex-col w-1/2 mt-2"}>
+              <label htmlFor="customer_contact">Enter Contact (op)</label>
+              <input
+                type={"text"}
+                id="customer_contact"
+                className={
+                  "uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
+                }
+                placeholder="Customer Contact"
               />
             </div>
           </div>
+          {/*Second Row*/}
+          <div className={"flex flex-row gap-2 w-full "}>
+            <div className={"flex flex-col w-1/2 mt-2"}>
+              <label htmlFor="item_name">Enter Item Name</label>
+              <input
+                type="text"
+                id="item_name"
+                className={
+                  "uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
+                }
+                placeholder="Item Name"
+              />
+            </div>
+            <div className={"flex flex-col w-1/2 mt-2"}>
+              <label htmlFor="select">
+                {itemType.type === "" ? "Select" : itemType.type}
+              </label>
+              <div className={"mt-1"}>
+                <PriceSelect
+                  id="select"
+                  price={metal_price}
+                  onItemTypeSelect={onItemTypeSelect}
+                  isAutoPrice={isAutoPrice}
+                />
+              </div>
+            </div>
+          </div>
         </div>
-        {/*Third Row */}
         <TotalQCal
           onreqNewPrice={onreqNewPrice}
           pricemodel={priceModel}
           calText={calculatedText}
         />
-        {/*Forth Row */}
-        <div className={"flex flex-col gap-3 w-full bg-gray-300 px-2 py-4 "}>
-          <p className={"text-xl font-semibold"}>Deposite Box</p>
-          <DepositeCom onNewDepositeChange={onNewDepositeChange} />
-        </div>
+        <DepositeCom onNewDepositeChange={onNewDepositeChange} />
       </div>
       <BottomBar billinfo={bottomBarInfo} oncheckin={oncheckin} />
     </form>
@@ -235,35 +305,42 @@ const DepositeCom = ({ onNewDepositeChange }) => {
   };
 
   return (
-    <div className={"flex flex-row w-full gap-1"}>
-      <div className={"flex flex-col w-1/3"}>
-        <label htmlFor="select">Select Unit</label>
-        <select
-          onChange={handleChange}
-          className={
-            "appearance-none bg-indigo-600 form-select px-4 py-3  mt-1 text-white text-center"
-          }
-          name="items"
-          id="depunit"
-        >
-          <option value="">Select</option>
-          <option id="Gold" value="GM">
-            GM
-          </option>
-          <option value="MG">MG</option>
-        </select>
-      </div>
-      <div className={"flex flex-col w-2/3"}>
-        <label htmlFor="item">Enter Item Quantity in gm </label>
-        <input
-          id="inputbox"
-          onChange={handleChange}
-          type="number"
-          className={
-            "uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
-          }
-          placeholder="Item Quantity"
-        />
+    <div
+      className={
+        "flex flex-col gap-3 w-full bg-gray-100 shadow-md rounded-md px-2 py-4 "
+      }
+    >
+      <p className={"text-xl font-semibold"}>Deposite Box</p>
+      <div className={"flex flex-row w-full gap-1"}>
+        <div className={"flex flex-col w-1/3"}>
+          <label htmlFor="select">Select Unit</label>
+          <select
+            onChange={handleChange}
+            className={
+              "appearance-none bg-blue-600 form-select px-4 py-3  mt-1 text-white text-center"
+            }
+            name="items"
+            id="depunit"
+          >
+            <option value="">Select</option>
+            <option id="Gold" value="GM">
+              GM
+            </option>
+            <option value="MG">MG</option>
+          </select>
+        </div>
+        <div className={"flex flex-col w-2/3"}>
+          <label htmlFor="item">Enter Item Quantity in gm </label>
+          <input
+            id="inputbox"
+            onChange={handleChange}
+            type="number"
+            className={
+              "uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
+            }
+            placeholder="Item Quantity"
+          />
+        </div>
       </div>
     </div>
   );
@@ -294,17 +371,27 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
   };
 
   return (
-    <div className={"flex flex-col gap-3 w-full bg-gray-300 px-2 py-4 "}>
-      <div>
-        <p className={"text-xl font-semibold"}>Price Box</p>
-        <p className={"text-xl  text-pink-500 font-bold"}>{calText}</p>
+    <div
+      className={
+        "flex flex-col gap-3 w-full bg-gray-100 rounded-md shadow-md px-2 py-4 "
+      }
+    >
+      <div
+        className={
+          "md:flex md:flex-row md:justify-between md:items-baseline md:gap-2"
+        }
+      >
+        <p className={"text-xl md:text-base font-semibold"}>Price Box</p>
+        <p className={"text-xl md:text-base  text-pink-500 font-bold"}>
+          {calText}
+        </p>
       </div>
       <div className={"flex gap-1"}>
-        <div className={"flex flex-col w-44"}>
+        <div className={"flex flex-col w-32"}>
           <label htmlFor="select">Select unit</label>
           <select
             className={
-              "appearance-none bg-indigo-600 form-select px-4 py-3  mt-1 text-white text-center"
+              "appearance-none bg-blue-600 form-select px-4 py-3  mt-1 text-white text-center"
             }
             onChange={onInputChange}
             name="unitoncal"
@@ -330,11 +417,10 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
             placeholder="Quantity"
           />
         </div>
-
         <div className={"flex flex-col w-3/5"}>
           <label
             htmlFor="item"
-            className={"text-right font-bold text-indigo-600"}
+            className={"text-right font-bold text-blue-600"}
           >
             Billing Price
           </label>
