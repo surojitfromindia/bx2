@@ -59,7 +59,7 @@ export default function Dashboard() {
       <div className={"py-2 px-4 mt-2"}>
         <Switch>
           <Route exact path="/" component={() => <Redirect to="/home" />} />
-          <Route exact path="/home" component={() => <Home />} />
+          <Route exact path="/home" component={Home} />
           <Route exact path="/bill" component={() => <Bills />} />
           <Route exact path="/bill/create" component={CreateBill} />
         </Switch>
