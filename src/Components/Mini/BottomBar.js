@@ -2,13 +2,13 @@ import React from "react";
 
 export default function BottomBar({ billinfo, oncheckin }) {
   const handleCheckIn = (ev) => {
-    oncheckin(true);
+    oncheckin();
   };
 
   return (
     <div
       className={
-        "p-3 fixed   left-0 right-0 bottom-0 h-24  bg-indigo-800 text-white"
+        "p-3 fixed   left-0 right-0 bottom-0 h-24  bg-blue-800 text-white"
       }
     >
       <div className={"flex gap-3 mt-3 justify-between items-baseline"}>
@@ -59,7 +59,7 @@ export default function BottomBar({ billinfo, oncheckin }) {
             type="button"
             onClick={handleCheckIn}
             className={
-              "text-md hover:bg-indigo-600 focus:outline-none  hover:outline-none bg-indigo-500 rounded-sm px-3 py-1"
+              "text-md hover:bg-blue-600 focus:outline-none  hover:outline-none bg-blue-500 rounded-sm px-3 py-1"
             }
             value="Check-Out"
           />

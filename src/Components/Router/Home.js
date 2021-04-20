@@ -12,16 +12,12 @@ export default function Home(props) {
     ybc: 80,
   };
   return (
-    <div className={"flex flex-col gap-3 md:flex-row"}>
-      <div className={"h-1/2 md:w-1/3 "}>
+    <div className={"grid gap-3 md:grid-cols-2 lg:grid-cols-3"}>
+      <div className={""}>
         <GoldPriceCard />
       </div>
-      <div className={"h-1/2  md:w-1/3"}>
+      <div className={""}>
         <SilverPriceCard />
-      </div>
-      <div className={"flex flex-col gap-3 h-1/2  md:w-1/3"}>
-        <div></div>
-        <div></div>
       </div>
     </div>
   );
