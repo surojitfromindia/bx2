@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import PriceSelect from "./PriceSelect";
 import BottomBar from "./BottomBar";
 import Modal from "../Modal/BillCreationModal";
+import { InsetBill } from "../../Controllers/createBill";
 
 let metal_price = {
   gold: 4500,
@@ -10,13 +11,15 @@ let metal_price = {
   other: 300,
 };
 
+let finalBill = {};
+
 export default function CreateBill() {
   let history = useHistory();
   const handleback = () => {
     history.goBack();
   };
   const [showModal, setShowModal] = useState(false);
-  const [itemType, setItemType] = useState({ unit: "Select", price: 0 });
+  const [itemType, setItemType] = useState({ type: "", price: 0 });
   const [isAutoPrice, setAutoPrice] = useState(true);
   const [priceModel, setPriceModel] = useState({
     price: { value: 0, unit: "gm", gst: 0 },
@@ -36,15 +39,18 @@ export default function CreateBill() {
     unit: "gm",
     mc: 0,
   });
+  const [checkinState, setCheckinState] = useState({
+    buttontext: "Purchase",
+    statustext: "",
+  });
   const handleOnAutoPriceToggle = () => {
     setAutoPrice(!isAutoPrice);
   };
   const onItemTypeSelect = (value, valueType) => {
-    setItemType({ unit: valueType, price: value });
+    setItemType({ type: valueType, price: value });
   };
 
   const onreqNewPrice = (buypricmodel) => {
-    console.log(buypricmodel);
     setSubInfos(buypricmodel);
   };
 
@@ -84,16 +90,18 @@ export default function CreateBill() {
       //the raw material, that weight more or equal to required amount/weight
       subtotal = subInfos.mc;
     } else {
-      subtotal = (
-        Math.abs(depositepriceAmount - buypricmodelAnount) * itemType.price +
-        subInfos.mc
-      ).toFixed(3);
+      subtotal = Number(
+        (
+          Math.abs(depositepriceAmount - buypricmodelAnount) * itemType.price +
+          subInfos.mc
+        ).toFixed(3)
+      );
     }
 
     //value rounding
-    let gst = Number(subtotal * 0.03).toFixed(0);
-    let nonR = Number(subtotal + gst);
-    let total = nonR.toFixed(1);
+    let gst = Number((subtotal * 0.03).toFixed(0));
+    let nonR = subtotal + gst;
+    let total = Number(nonR.toFixed(1));
 
     let sellval =
       buypricmodelAnount > 1
@@ -113,8 +121,33 @@ export default function CreateBill() {
       },
     });
     setCalculatedText(
-      `(${sellval}-${depositepriceAmount.toFixed(3)}) gm * ${itemType.price}`
+      `(${sellval}-${depositepriceAmount.toFixed(3)}) > ${(
+        sellval - depositepriceAmount
+      ).toFixed(3)} gm * ${itemType.price}`
     );
+
+    //fillup bill
+    finalBill.customer_name = document.getElementById("customer_name").value;
+    finalBill.customer_contact = document.getElementById(
+      "customer_contact"
+    ).value;
+    finalBill.item_details = {
+      name: document.getElementById("item_name").value,
+      type: itemType.type,
+      price_pg: itemType.price,
+      quantity: subInfos.qua,
+      unit: subInfos.unit,
+    };
+    finalBill.deposite = {
+      quantity: deposite.qua,
+      unit: deposite.unit,
+    };
+    finalBill.prices = {
+      st: subtotal,
+      mc: subInfos.mc,
+      gst: gst,
+      gt: total,
+    };
   };
 
   const handleModalClose = () => {
@@ -125,10 +158,44 @@ export default function CreateBill() {
     else alert("Something is Wrong Try Again");
   };
 
+  const handlePurchase = async (finalizeInfos) => {
+    setCheckinState({
+      buttontext: "Purchasing....",
+      statustext: "Wait....",
+    });
+    finalBill.payment = {
+      tp: finalizeInfos.tp,
+      timeline: [
+        {
+          paid: finalizeInfos.firstPay,
+        },
+      ],
+    };
+    InsetBill(finalBill)
+      .then((message) => {
+        setCheckinState({
+          buttontext: "Purchased",
+          statustext: `Succesfull, bill created [${message}]`,
+        });
+      })
+      .catch((err) => {
+        setCheckinState({
+          buttontext: "Purchase",
+          statustext: "Failed",
+        });
+      });
+  };
+
   return (
-    <form>
+    <form className={"flex flex-col"}>
       {showModal ? (
-        <Modal show={showModal} handleClose={handleModalClose} infos={{}} />
+        <Modal
+          show={showModal}
+          handleClose={handleModalClose}
+          infos={finalBill}
+          handlePurchase={handlePurchase}
+          checkintext={checkinState}
+        />
       ) : (
         ""
       )}
@@ -153,14 +220,14 @@ export default function CreateBill() {
           <label htmlFor="autoprice">Auto Price</label>
         </div>
       </div>
-      <div className={"h-full flex flex-col gap-5 mt-5 mb-36 md:w-2/3"}>
+      <div className={"flex flex-col gap-5 mt-5 mb-32 md:w-2/3"}>
         {/*First input row*/}
         <div className={"flex flex-row gap-2 w-full "}>
           <div className={"flex flex-col w-1/2"}>
-            <label htmlFor="username">Enter Name</label>
+            <label htmlFor="customer_name">Enter Name</label>
             <input
               type="text"
-              id="username"
+              id="customer_name"
               className={
                 "uppercase rounded-sm px-4 py-3 mt-2 focus:outline-none bg-gray-300 w-full"
               }
@@ -168,10 +235,10 @@ export default function CreateBill() {
             />
           </div>
           <div className={"flex flex-col w-1/2"}>
-            <label htmlFor="contact">Enter Contact (op)</label>
+            <label htmlFor="customer_contact">Enter Contact (op)</label>
             <input
               type={"text"}
-              id="contact"
+              id="customer_contact"
               className={
                 "uppercase rounded-sm px-4 py-3 mt-2 focus:outline-none bg-gray-300 w-full"
               }
@@ -183,10 +250,10 @@ export default function CreateBill() {
         {/*Second Row*/}
         <div className={"flex flex-row gap-2 w-full "}>
           <div className={"flex flex-col w-1/2"}>
-            <label htmlFor="item">Enter Item Name</label>
+            <label htmlFor="item_name">Enter Item Name</label>
             <input
               type="text"
-              id="item"
+              id="item_name"
               className={
                 "uppercase rounded-sm px-4 py-3 mt-2 focus:outline-none bg-gray-300 w-full"
               }
@@ -194,7 +261,9 @@ export default function CreateBill() {
             />
           </div>
           <div className={"flex flex-col w-1/2"}>
-            <label htmlFor="select">{itemType.unit}</label>
+            <label htmlFor="select">
+              {itemType.type === "" ? "Select" : itemType.type}
+            </label>
             <div className={"mt-2"}>
               <PriceSelect
                 id="select"
@@ -212,7 +281,11 @@ export default function CreateBill() {
           calText={calculatedText}
         />
         {/*Forth Row */}
-        <div className={"flex flex-col gap-3 w-full bg-gray-300 px-2 py-4 "}>
+        <div
+          className={
+            "flex flex-col gap-3 w-full bg-gray-100 shadow-md rounded-md px-2 py-4 "
+          }
+        >
           <p className={"text-xl font-semibold"}>Deposite Box</p>
           <DepositeCom onNewDepositeChange={onNewDepositeChange} />
         </div>
@@ -294,13 +367,17 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
   };
 
   return (
-    <div className={"flex flex-col gap-3 w-full bg-gray-300 px-2 py-4 "}>
+    <div
+      className={
+        "flex flex-col gap-3 w-full bg-gray-100 rounded-md shadow-md px-2 py-4 "
+      }
+    >
       <div>
         <p className={"text-xl font-semibold"}>Price Box</p>
         <p className={"text-xl  text-pink-500 font-bold"}>{calText}</p>
       </div>
       <div className={"flex gap-1"}>
-        <div className={"flex flex-col w-44"}>
+        <div className={"flex flex-col w-32"}>
           <label htmlFor="select">Select unit</label>
           <select
             className={
