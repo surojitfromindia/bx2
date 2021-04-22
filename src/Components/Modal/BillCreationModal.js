@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {} from "../../Controllers/createBill";
+import {} from "../../Controllers/Bill";
 
 export default function BillCreationModal({
   handleClose,
@@ -41,11 +41,27 @@ export default function BillCreationModal({
         <div className={"overflow-y-auto px-1"}>
           <div>
             <h2 className={"text-2xl text-blue-600"}>Final</h2>
-            <p>{checkintext.statustext}</p>
+            <p
+              className={`${
+                checkintext.statustext === "Purchased"
+                  ? "text-green-600"
+                  : checkintext.statustext === "Failed"
+                  ? "text-red-600"
+                  : "text-indigo-600"
+              }`}
+            >
+              {checkintext.statustext}
+            </p>
           </div>
 
-          <div className={"grid grid-cols-8 my-3 text-md gap-3 font-semibold"}>
-            <p className={"col-span-4 px-3 py-1 bg-gray-200"}>Item name</p>
+          <div className={"grid grid-cols-8 my-3 gap-3  "}>
+            <p
+              className={
+                "col-span-4 px-0 pr-2 py-1 text-gray-600 text-base font-medium  "
+              }
+            >
+              Name
+            </p>
             <p className={"col-span-4 flex justify-start  py-1 "}>
               {infos.item_details.name ? (
                 <span>{infos.item_details.name}</span>
@@ -53,7 +69,13 @@ export default function BillCreationModal({
                 <span className={"text-red-600 font-semibold"}>Empty</span>
               )}
             </p>
-            <p className={"col-span-4 px-3 py-1 bg-gray-200"}>Item type</p>
+            <p
+              className={
+                "col-span-4 px-0 pr-2 py-1 text-gray-600 text-base font-medium"
+              }
+            >
+              Type
+            </p>
             <p className={"col-span-4 flex justify-start py-1"}>
               {infos.item_details.type ? (
                 <span>{infos.item_details.type}</span>
@@ -61,8 +83,12 @@ export default function BillCreationModal({
                 <span className={"text-red-600 font-semibold"}>Empty</span>
               )}
             </p>
-            <p className={"col-span-4 px-3 py-1 bg-gray-200"}>
-              Weight (required){" "}
+            <p
+              className={
+                "col-span-4 px-0 pr-2 py-1 text-gray-600 text-base font-medium"
+              }
+            >
+              Weight
             </p>
             <p className={"col-span-4 flex justify-start py-1"}>
               {infos.item_details.quantity ? (
@@ -73,8 +99,12 @@ export default function BillCreationModal({
                 <span className={"text-red-600 font-semibold"}>Empty</span>
               )}
             </p>
-            <p className={"col-span-4 px-3 py-1 bg-gray-200"}>
-              Weight deposited
+            <p
+              className={
+                "col-span-4 px-0 pr-2 py-1 text-gray-600 text-base font-medium"
+              }
+            >
+              Deposited
             </p>
             <p className={"col-span-4  flex justify-start py-1"}>
               {infos.deposite.quantity ? (
@@ -85,7 +115,13 @@ export default function BillCreationModal({
                 <span className={"text-red-600 font-semibold"}>Empty</span>
               )}
             </p>
-            <p className={"col-span-4 px-3 py-1 bg-gray-200"}>Subtotal</p>
+            <p
+              className={
+                "col-span-4 px-0 pr-2 py-1 text-gray-600 text-base font-medium"
+              }
+            >
+              Subtotal
+            </p>
             <p className={"col-span-4  flex justify-start py-1"}>
               {infos.prices.st ? (
                 <span>{infos.prices.st}</span>
@@ -93,7 +129,13 @@ export default function BillCreationModal({
                 <span className={"text-red-600 font-semibold"}>Empty</span>
               )}
             </p>
-            <p className={"col-span-4 px-3 py-1 bg-gray-200"}>Making Charge</p>
+            <p
+              className={
+                "col-span-4 px-0 pr-2 py-1 text-gray-600 text-base font-medium"
+              }
+            >
+              MC
+            </p>
             <p className={"col-span-4 flex justify-start py-1"}>
               {infos.prices.mc ? (
                 <span>{infos.prices.mc}</span>
@@ -101,7 +143,13 @@ export default function BillCreationModal({
                 <span className={"text-red-600 font-semibold"}>Empty</span>
               )}
             </p>
-            <p className={"col-span-4 px-3 py-1 bg-gray-200"}>GST</p>
+            <p
+              className={
+                "col-span-4 px-0 pr-2 py-1 text-gray-600 text-base font-medium"
+              }
+            >
+              GST
+            </p>
             <p className={"col-span-4 flex justify-start py-1"}>
               {infos.prices.gst ? (
                 <span>{infos.prices.gst}</span>
@@ -152,7 +200,7 @@ export default function BillCreationModal({
                     checkintext.buttontext === "Purchased"
                       ? "bg-green-600"
                       : "bg-blue-600"
-                  }  text-white hover:bg-blue-800 focus:bg-blue-600 focus:animate-spin `}
+                  }  text-white  `}
                 />
               </div>
             </div>
@@ -161,8 +209,8 @@ export default function BillCreationModal({
         <input
           type="button"
           className={
-            "outline-none mt-5 py-1 md:w-40 uppercase bg-transparent" +
-            "text-blue-700 shadow-md bg-gray-200 font-medium hover:text-white hover:bg-red-600  focus:bg-red-700 focus:ring-4"
+            "outline-none mt-5 py-2 md:w-40 uppercase bg-transparent" +
+            "text-blue-700 sha0 pr-2ow-md  text-base  font-medium hover:text-white hover:bg-red-600  focus:bg-red-700 focus:ring-4"
           }
           value={"close"}
           onClick={handleClose}
