@@ -21,7 +21,7 @@ export default function PriceSelect({ price, onItemTypeSelect, isAutoPrice }) {
   };
 
   return (
-    <div className={"w-full flex flex-row "}>
+    <div className={"grid grid-cols-2"}>
       <input
         onChange={handlevaluemanualChange}
         type="number"
@@ -29,14 +29,12 @@ export default function PriceSelect({ price, onItemTypeSelect, isAutoPrice }) {
         id="select"
         value={selectvalue}
         className={
-          "uppercase rounded-sm px-4 py-3 w-full focus:outline-none bg-gray-300"
+          "uppercase rounded-sm px-4 py-3  focus:outline-none bg-gray-300"
         }
-        placeholder="Select Type"
+        placeholder="Type"
       />
       <select
-        className={
-          "appearance-none bg-blue-600 form-select text-white text-center"
-        }
+        className={"bg-blue-600  px-2  text-white "}
         name="items"
         id="itemsid"
         onChange={handleSelectedOptionChange}

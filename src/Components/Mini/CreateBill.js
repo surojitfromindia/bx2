@@ -3,12 +3,12 @@ import { useHistory } from "react-router-dom";
 import PriceSelect from "./PriceSelect";
 import BottomBar from "./BottomBar";
 import Modal from "../Modal/BillCreationModal";
-import { InsetBill } from "../../Controllers/createBill";
+import { InsetBill } from "../../Controllers/Bill";
 
 let metal_price = {
   gold: 4500,
   silver: 600,
-  other: 300,
+  other: 0, //only making charges
 };
 
 let finalBill = {};
@@ -248,7 +248,7 @@ export default function CreateBill() {
                 className={
                   "uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
                 }
-                placeholder="Customer Contact"
+                placeholder="Contact"
               />
             </div>
           </div>
@@ -348,11 +348,12 @@ const DepositeCom = ({ onNewDepositeChange }) => {
 
 let oldPrice = {
   qua: 0,
-  unit: "",
+  unit: "gm",
   mc: 0,
 };
 const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
   const onInputChange = (ev) => {
+
     if (ev.target.id === "making") {
       oldPrice.mc = ev.target.value;
     }
@@ -414,7 +415,7 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
             className={
               " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
             }
-            placeholder="Quantity"
+            placeholder="Quan"
           />
         </div>
         <div className={"flex flex-col w-3/5"}>

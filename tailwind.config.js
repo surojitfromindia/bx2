@@ -5,6 +5,11 @@ module.exports = {
     extend: {
       transitionProperty: {
         height: "height",
+        width: "width",
+        padding: "padding",
+      },
+      width: {
+        "w-25": "9rem",
       },
     },
   },
@@ -12,6 +17,7 @@ module.exports = {
     extend: {
       backgroundColor: ["checked"],
       borderColor: ["checked"],
+      width: ["hover", "focus", "group-hover"],
     },
   },
   plugins: [require("@tailwindcss/forms")],

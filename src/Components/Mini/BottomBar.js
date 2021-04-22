@@ -8,7 +8,7 @@ export default function BottomBar({ billinfo, oncheckin }) {
   return (
     <div
       className={
-        "p-3 fixed   left-0 right-0 bottom-0 h-24  bg-blue-800 text-white"
+        "py-1 px-3 fixed  left-0 right-0 bottom-0  bg-blue-800 text-white"
       }
     >
       <div className={"flex gap-3 mt-3 justify-between items-baseline"}>
@@ -33,7 +33,7 @@ export default function BottomBar({ billinfo, oncheckin }) {
             </p>
             <span>GST</span>
           </div>
-          <div className={"flex flex-col items-stretch"}>
+          {/*<div className={"flex flex-col "}>
             <p
               className={
                 "bg-green-400 text-green-800 text-md font-semibold rounded-sm px-3 py-1"
@@ -41,12 +41,12 @@ export default function BottomBar({ billinfo, oncheckin }) {
             >
               {billinfo.billprice - billinfo.gst}
             </p>
-            <span>Without gst</span>
-          </div>
+            <span>WGST</span>
+          </div>*/}
           <div className={"flex flex-col"}>
             <p
               className={
-                "text-md font-semibold flex items-center justify-center bg-yellow-200 text-red-700 rounded-sm px-3 py-1"
+                "text-md font-semibold flex items-center justify-center bg-green-400 text-green-800 rounded-sm px-3 py-1"
               }
             >
               {billinfo.billprice}

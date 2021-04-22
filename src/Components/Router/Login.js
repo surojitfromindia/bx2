@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 async function login(cred) {
-  return fetch("http://localhost:5000/user/login", {
+  return fetch("http://192.168.0.5:5000/user/login", {
     method: "post",
     body: JSON.stringify(cred),
     headers: {

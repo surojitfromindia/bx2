@@ -1,29 +1,26 @@
 import { useEffect, useState, Suspense, lazy } from "react";
-import useToken from "../../Hooks/useToken";
 import API from "../../Controllers/APIs/API";
 import HandleError from "../../Controllers/ErroHandeler/HandelErro";
 
-
 export default function SilverPriceCard(props) {
   const [pricerow, setPricerow] = useState();
-  const { token } = useToken();
   useEffect(() => {
     let mounted = true;
-    getAllSilverPrice(token)
+    getAllSilverPrice()
       .then((doc) => {
         if (mounted) {
           setPricerow(doc.data);
         }
       })
       .catch((err) => {
-        document.querySelector("#erromessage").innerHTML = HandleError(
-          err.response.status
+        document.querySelector("#erromessageSilver").innerHTML = HandleError(
+          err
         );
       });
     return () => {
       mounted = false;
     };
-  }, [token]);
+  }, []);
 
   const getAllSilverPrice = async () => {
     return await API().get("/price/silver");
@@ -39,8 +36,8 @@ export default function SilverPriceCard(props) {
   //props
   return (
     <div className={"py-4 px-6 bg-white rounded-md "}>
-      <h2 className={"text-xl text-indigo-500 font-bold"}>Silver (Kolkata)</h2>
-      <p id="erromessage"></p>
+      <h2 className={"text-xl text-indigo-500 font-bold"}>Silver </h2>
+      <p id="erromessageSilver"></p>
       <table className={"my-4 flex flex-col table-fixed w-full max-h-50"}>
         <thead>
           <tr className={"flex w-full text-left"}>
@@ -61,7 +58,7 @@ export default function SilverPriceCard(props) {
 function SilverPriceList(props) {
   return (
     <tbody
-      className={"font-semibold mt-2 overflow-y-scroll"}
+      className={"font-semibold mt-2 overflow-y-auto"}
       style={{ height: "50vh" }}
     >
       {props.pricerow?.map((price, index) => {

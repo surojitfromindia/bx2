@@ -1,6 +1,6 @@
 import CSI from "../Mini/CreateNewBillShortInfo";
 import { Link, useRouteMatch } from "react-router-dom";
-import BillList from "../Mini/CreateNewUserShortinfo";
+import BSI from "../Mini/CreateNewUserShortinfo";
 
 export default function Bills() {
   //props
@@ -19,7 +19,7 @@ export default function Bills() {
           <CSI infos={infos} />
         </div>
         <div className={"md:w-1/2 lg:w-1/3"}>
-          <BillList infos={infos} />
+          <BSI infos={infos} />
         </div>
       </div>
     </div>
