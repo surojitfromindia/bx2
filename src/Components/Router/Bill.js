@@ -13,7 +13,7 @@ export default function Bills() {
     ybc: 80,
   };
   return (
-    <div>
+    <div className={"px-4 py-4"}>
       <div className={"flex flex-col gap-2 md:flex-row md:w-full"}>
         <div className={"md:w-1/2 lg:w-1/3"}>
           <CSI infos={infos} />

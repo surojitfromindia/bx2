@@ -189,7 +189,7 @@ export default function CreateBill() {
   }, [deposite, itemType, subInfos]);
 
   return (
-    <form className={"flex flex-col"}>
+    <form className={"flex flex-col px-4 py-2"}>
       {showModal ? (
         <Modal
           show={showModal}
@@ -202,7 +202,7 @@ export default function CreateBill() {
         ""
       )}
       {/* Form Body */}
-      <div className={"flex flex-col gap-5  mt-5 mb-32 md:grid md:grid-cols-2"}>
+      <div className={"flex flex-col gap-5  mt-1 mb-20 md:grid md:grid-cols-2"}>
         <div
           className={"flex flex-col shadow-md bg-gray-100 px-2 py-4 rounded-md"}
         >
@@ -307,7 +307,7 @@ const DepositeCom = ({ onNewDepositeChange }) => {
   return (
     <div
       className={
-        "flex flex-col gap-3 w-full bg-gray-100 shadow-md rounded-md px-2 py-4 "
+        " flex flex-col gap-3 w-full bg-gray-100 shadow-md rounded-md px-2 py-4 "
       }
     >
       <p className={"text-xl font-semibold"}>Deposite Box</p>
@@ -353,7 +353,6 @@ let oldPrice = {
 };
 const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
   const onInputChange = (ev) => {
-
     if (ev.target.id === "making") {
       oldPrice.mc = ev.target.value;
     }
