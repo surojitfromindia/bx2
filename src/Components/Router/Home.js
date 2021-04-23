@@ -1,6 +1,6 @@
 import GoldPriceCard from "../Mini/GoldPrice";
 import SilverPriceCard from "../Mini/SilverPrice";
-import CSI from "../Mini/CreateNewBillShortInfo";
+import RecentlyCreatedBill from "../Mini/RecentlyCreatedBill";
 
 export default function Home(props) {
   //props
@@ -12,11 +12,15 @@ export default function Home(props) {
     ybc: 80,
   };
   return (
-    <div className={"grid gap-3 md:grid-cols-2 lg:grid-cols-3"}>
-      <div className={""}>
-        <GoldPriceCard />
+    <div className={"px-4 py-4 grid gap-3 "}>
+      <span className={"px-2 -mb-1 font-semibold text-gray-600"}>
+        Recently Added
+      </span>
+      <div className={"overflow-y-scroll "}>
+        <RecentlyCreatedBill />
       </div>
-      <div className={""}>
+      <div className={"grid gap-3 sm:grid-cols-2"}>
+        <GoldPriceCard />
         <SilverPriceCard />
       </div>
     </div>

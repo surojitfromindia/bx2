@@ -29,7 +29,7 @@ export default function GoldPriceCard(props) {
     <div className={"py-4 px-6 bg-white rounded-md "}>
       <h2 className={"text-xl text-indigo-500 font-bold "}>Gold</h2>
       <p id="erromessageGold"></p>
-      <table className={"my-4 flex flex-col table-fixed w-full  max-h-50"}>
+      <table className={"my-4 flex flex-col table-fixed w-full "}>
         <thead>
           <tr className={"flex w-full text-left"}>
             <th className={"w-2/4"}>Date</th>
@@ -58,9 +58,7 @@ export default function GoldPriceCard(props) {
 function GoldPriceList(props) {
   return (
     <tbody
-      className={
-        "font-semibold mt-2 overflow-y-scroll  no-scrollbar"
-      }
+      className={"font-semibold mt-2 overflow-y-scroll  no-scrollbar"}
       style={{ height: "50vh" }}
     >
       {props.pricerow?.map((price, index) => {

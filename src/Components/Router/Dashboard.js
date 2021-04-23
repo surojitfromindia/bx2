@@ -22,7 +22,7 @@ export default function Dashboard() {
   }, [location]);
   return (
     <div className={"flex flex-col"}>
-      <div className={"p-4 text-gray-100 bg-gray-700 sticky top-0"}>
+      <div className={"p-4 text-gray-100 bg-gray-700"}>
         <div className={"flex justify-between items-center"}>
           <h1>Welcome Surojit</h1>
           <div className={"flex justify-between items-center"}>
@@ -31,7 +31,6 @@ export default function Dashboard() {
                 type="text"
                 name="search"
                 placeholder={"search.."}
-                
                 className={
                   "rounded-sm transition-width  duration-300 ease-out transform w-20 group-hover:w-52  px-3 py-0.5 text-gray-600 "
                 }
@@ -90,7 +89,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      <div className={"py-2 px-4 mt-2"}>
+      <div className={""}>
         <Switch>
           <Route exact path="/" component={() => <Redirect to="/home" />} />
           <Route exact path="/home" component={Home} />
