@@ -16,7 +16,7 @@ export default function Home(props) {
       <span className={"px-2 -mb-1 font-semibold text-gray-600"}>
         Recently Added
       </span>
-      <div className={"overflow-y-scroll "}>
+      <div className={"overflow-x-scroll "}>
         <RecentlyCreatedBill />
       </div>
       <div className={"grid gap-3 sm:grid-cols-2"}>

@@ -1,19 +1,23 @@
-import { useEffect, useState, Suspense, lazy } from "react";
+import { useEffect, useState } from "react";
 import API from "../../Controllers/APIs/API";
-import HandleError from "../../Controllers/ErroHandeler/HandelErro";
+import LoadingComp from "./LoadingComp";
+import getErrorMessage from "../../Controllers/ErroHandeler/HandelErro";
 
 export default function GoldPriceCard(props) {
+  const [isLoading, setIsLoading] = useState(true);
   const [pricerow, setPricerow] = useState();
+  const [errortext, setErrorText] = useState("");
   useEffect(() => {
     let mounted = true;
     getAllGoldPrice()
       .then((doc) => {
         if (mounted) {
           setPricerow(doc.data);
+          setIsLoading(false);
         }
       })
       .catch((err) => {
-        document.querySelector("#erromessageGold").innerHTML = HandleError(err);
+        setErrorText(getErrorMessage(err));
       });
     return () => {
       mounted = false;
@@ -24,33 +28,29 @@ export default function GoldPriceCard(props) {
     return await API().get("/price/gold");
   };
 
-  //props
   return (
     <div className={"py-4 px-6 bg-white rounded-md "}>
       <h2 className={"text-xl text-indigo-500 font-bold "}>Gold</h2>
-      <p id="erromessageGold"></p>
-      <table className={"my-4 flex flex-col table-fixed w-full "}>
-        <thead>
-          <tr className={"flex w-full text-left"}>
-            <th className={"w-2/4"}>Date</th>
-            <th className={"w-1/4"}>24K/g</th>
-            <th className={"w-1/4"}>22K/g</th>
-            <th className={"w-1/4"}>HM/g</th>
-          </tr>
-        </thead>
-
-        <Suspense
-          fallback={
-            <tbody>
-              <tr>
-                <td>Loading</td>
+      {isLoading ? (
+        <div>
+          <LoadingComp onerrortext={errortext} />
+        </div>
+      ) : (
+        <div>
+          <table className={"my-4 flex flex-col table-fixed w-full "}>
+            <thead>
+              <tr className={"flex w-full text-left"}>
+                <th className={"w-2/4"}>Date</th>
+                <th className={"w-1/4"}>24K/g</th>
+                <th className={"w-1/4"}>22K/g</th>
+                <th className={"w-1/4"}>HM/g</th>
               </tr>
-            </tbody>
-          }
-        >
-          <GoldPriceList pricerow={pricerow} />
-        </Suspense>
-      </table>
+            </thead>
+
+            <GoldPriceList pricerow={pricerow} />
+          </table>
+        </div>
+      )}
     </div>
   );
 }

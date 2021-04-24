@@ -2,24 +2,23 @@ import React, { useState, useEffect, useRef } from "react";
 import { GetMiniBills } from "../../Controllers/Bill";
 import moment from "moment";
 import LoadingComp from "./LoadingComp";
-var fixedList = [];
-var seachFillterList = [];
+import getErrorMessage from "../../Controllers/ErroHandeler/HandelErro";
 export default function BillList(props) {
   const [billlist, setbilllis] = useState([]);
   const [seachFillterList, setseachFillterList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [errortext, setErrorText] = useState("");
+
   useEffect(async () => {
     let mounted = true;
-
     try {
       let miniBillInfos = await GetMiniBills();
       if (mounted) {
         setbilllis(miniBillInfos);
-        fixedList = miniBillInfos;
         setIsLoading(false);
       }
     } catch (err) {
-      console.log(err);
+      setErrorText(getErrorMessage(err));
     }
     return () => {
       mounted = false;
@@ -45,7 +44,9 @@ export default function BillList(props) {
   return (
     <div>
       {isLoading ? (
-        <LoadingComp />
+        <div className={"grid place-items-center h-screen"}>
+          <LoadingComp onerrortext={errortext} />
+        </div>
       ) : (
         <div>
           <div className={"sticky  top-0  md:mx-14 lg:mx-48"}>
