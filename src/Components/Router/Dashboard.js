@@ -1,25 +1,16 @@
-import {
-  NavLink,
-  Route,
-  Switch,
-  Redirect,
-  useLocation,
-} from "react-router-dom";
-import { useState, useEffect } from "react";
+import { NavLink, Route, Switch, Redirect } from "react-router-dom";
+import { useState } from "react";
 import Home from "./Home";
 import Bills from "./Bill";
 import CreateBill from "../Mini/CreateBill";
 import BillList from "../Mini/BillList";
 
 export default function Dashboard() {
-  let location = useLocation();
   const [showMenu, setShowMenu] = useState(false);
   const handleHideAndShow = () => {
     setShowMenu((t) => !t);
   };
-  useEffect(() => {
-    console.log(location.pathname);
-  }, [location]);
+
   return (
     <div className={"flex flex-col"}>
       <div className={"p-4 text-gray-100 bg-gray-700"}>

@@ -19,12 +19,12 @@ function InsetBill(payLoad) {
 function GetMiniBills() {
   return new Promise((resolve, reject) => {
     API()
-      .get("/bill/")
+      .get("/bill")
       .then((miniBills) => {
         resolve(miniBills.data);
       })
       .catch((err) => {
-        reject(new Error(err));
+        reject(err);
       });
   });
 }

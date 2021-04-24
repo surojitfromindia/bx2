@@ -1,21 +1,22 @@
-import { useEffect, useState, Suspense, lazy } from "react";
+import { useEffect, useState } from "react";
 import API from "../../Controllers/APIs/API";
-import HandleError from "../../Controllers/ErroHandeler/HandelErro";
-
-export default function SilverPriceCard(props) {
+import LoadingComp from "./LoadingComp";
+import getErrorMessage from "../../Controllers/ErroHandeler/HandelErro";
+export default function SilverPriceCard() {
   const [pricerow, setPricerow] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [errortext, setErrorText] = useState("");
   useEffect(() => {
     let mounted = true;
     getAllSilverPrice()
       .then((doc) => {
         if (mounted) {
           setPricerow(doc.data);
+          setIsLoading(false);
         }
       })
       .catch((err) => {
-        document.querySelector("#erromessageSilver").innerHTML = HandleError(
-          err
-        );
+        setErrorText(getErrorMessage(err));
       });
     return () => {
       mounted = false;
@@ -26,31 +27,26 @@ export default function SilverPriceCard(props) {
     return await API().get("/price/silver");
   };
 
-  const fallbackBody = (
-    <tbody>
-      <tr>
-        <td>Loading</td>
-      </tr>
-    </tbody>
-  );
-  //props
   return (
     <div className={"py-4 px-6 bg-white rounded-md "}>
       <h2 className={"text-xl text-indigo-500 font-bold"}>Silver </h2>
-      <p id="erromessageSilver"></p>
-      <table className={"my-4 flex flex-col table-fixed w-full max-h-50"}>
-        <thead>
-          <tr className={"flex w-full text-left"}>
-            <th className={"w-1/2"}>Date</th>
-            <th className={"w-1/4"}>Tnk/g</th>
-            <th className={"w-1/4"}>Slab/g</th>
-          </tr>
-        </thead>
+      {isLoading ? (
+        <LoadingComp onerrortext={errortext} />
+      ) : (
+        <div>
+          <table className={"my-4 flex flex-col table-fixed w-full max-h-50"}>
+            <thead>
+              <tr className={"flex w-full text-left"}>
+                <th className={"w-1/2"}>Date</th>
+                <th className={"w-1/4"}>Tnk/g</th>
+                <th className={"w-1/4"}>Slab/g</th>
+              </tr>
+            </thead>
 
-        <Suspense fallback={fallbackBody}>
-          <SilverPriceList pricerow={pricerow} />
-        </Suspense>
-      </table>
+            <SilverPriceList pricerow={pricerow} />
+          </table>
+        </div>
+      )}
     </div>
   );
 }
