@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { GetMiniBills } from "../../Controllers/Bill";
 import moment from "moment";
 import LoadingComp from "./LoadingComp";
 import getErrorMessage from "../../Controllers/ErroHandeler/HandelErro";
+
+let globalid = "";
 export default function BillList(props) {
   const [billlist, setbilllis] = useState([]);
   const [seachFillterList, setseachFillterList] = useState([]);
@@ -11,17 +14,32 @@ export default function BillList(props) {
 
   useEffect(async () => {
     let mounted = true;
+    let t;
     try {
       let miniBillInfos = await GetMiniBills();
       if (mounted) {
         setbilllis(miniBillInfos);
         setIsLoading(false);
+        if (globalid) {
+          document.getElementById(globalid).scrollIntoView({
+            behavior: "smooth",
+            inline: "center",
+            block: "center",
+          });
+
+          /*  document.getElementById(globalid).classList.add("bg-yellow-300");
+          t = setTimeout(() => {
+            document.getElementById(globalid).classList.remove("bg-yellow-300");
+          }, 2000); */
+        }
       }
     } catch (err) {
       setErrorText(getErrorMessage(err));
     }
     return () => {
+      //clearTimeout(t);
       mounted = false;
+      globalid = "";
     };
   }, []);
 
@@ -40,6 +58,10 @@ export default function BillList(props) {
       inline: "center",
       block: "center",
     });
+  };
+
+  const onCardItemViewClick = (id) => {
+    globalid = id;
   };
   return (
     <div>
@@ -62,7 +84,11 @@ export default function BillList(props) {
             }
           >
             {billlist.map((billdetails) => (
-              <BillItems details={billdetails} key={billdetails._id} />
+              <BillItems
+                details={billdetails}
+                key={billdetails._id}
+                onlinkClick={onCardItemViewClick}
+              />
             ))}
           </div>
         </div>
@@ -108,12 +134,15 @@ const SearchBox = ({ billlist, onSearch, onClick }) => {
   );
 };
 
-const BillItems = ({ details }) => {
+const BillItems = ({ details, onlinkClick }) => {
+  const handleOnLinkClick = () => {
+    onlinkClick?.(details._id);
+  };
   return (
     <div
       id={details._id}
       className={
-        "group rounded-md flex flex-col gap-3 justify-between shadow-md  bg-gray-100 "
+        "group transition-colors ease-in-out duration-200 rounded-md flex flex-col gap-3 justify-between shadow-md  bg-gray-100 hover:bg-yellow-300 "
       }
     >
       <div className={"flex pt-5 px-3 flex-col divide-y divide-gray-200"}>
@@ -123,8 +152,8 @@ const BillItems = ({ details }) => {
               <span
                 className={`px-1 py-0.5  rounded-tr-sm rounded-br-sm ${
                   details.payment.status === "paid"
-                    ? "text-green-700  font-medium  bg-green-300 "
-                    : "text-red-700 font-medium  bg-red-300 "
+                    ? "text-green-700  font-medium  bg-green-200 "
+                    : "text-red-700 font-medium  bg-red-200 "
                 }" uppercase `}
               >
                 {details.payment.status}
@@ -233,11 +262,11 @@ const BillItems = ({ details }) => {
               </span>
               <span
                 className={
-                  "ml-1 h-8 overflow-y-hidden  text-xs font-medium text-gray-600"
+                  "ml-1 h-8 overflow-hidden  text-xs font-medium text-gray-600"
                 }
               >
                 Man this is cool as fuck untill this is made.everything shine
-                faster than my whole collection of art
+                faster than my whole collection of art. we are good
               </span>
             </div>
           </div>
@@ -245,13 +274,15 @@ const BillItems = ({ details }) => {
       </div>
 
       <div className={"flex"}>
-        <button
+        <Link
+          onClick={handleOnLinkClick}
+          to={`/bill/billlist/${details._id}`}
           className={
-            "flex-grow rounded-b-md focus:outline-none focus:border-none px-4 py-1.5 text-sm text-green-50 font-medium bg-gray-600 hover:bg-gray-700 shadow-md"
+            "text-center flex-grow rounded-b-md focus:outline-none focus:border-none px-4 py-1 text-sm text-green-50 font-medium bg-gray-600 hover:bg-gray-700 shadow-md"
           }
         >
           view
-        </button>
+        </Link>
       </div>
     </div>
   );

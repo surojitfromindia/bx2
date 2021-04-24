@@ -29,11 +29,12 @@ export default function RecentlyCreatedBill() {
       {isLoading ? (
         <LoadingComp onerrortext={errortext} />
       ) : (
-        <div className={"flex flex-row gap-3 "}>
+        <div className={"flex flex-row"}>
           {billlist.slice(0, 4).map((billdetails, index) => (
             <div
               key={index}
-              className={`${index === 0 ? "ml-1" : ""}  flex-shrink-0 w-96`}
+              className={`${index === 0 ? "pl-0" : ""}  flex-shrink-0 px-1.5`}
+              style={{ width: "340px" }}
             >
               {" "}
               <BillItems details={billdetails} />

@@ -4,6 +4,7 @@ import Home from "./Home";
 import Bills from "./Bill";
 import CreateBill from "../Mini/CreateBill";
 import BillList from "../Mini/BillList";
+import SingleBill from "../Mini/SingleBill";
 
 export default function Dashboard() {
   const [showMenu, setShowMenu] = useState(false);
@@ -87,6 +88,7 @@ export default function Dashboard() {
           <Route exact path="/bill" component={() => <Bills />} />
           <Route exact path="/bill/create" component={CreateBill} />
           <Route exact path="/bill/billlist" component={BillList} />
+          <Route exact path="/bill/billlist/:id" component={SingleBill} />
         </Switch>
       </div>
     </div>
