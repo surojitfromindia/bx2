@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import API from "../../Controllers/APIs/API";
 import LoadingComp from "./LoadingComp";
 import getErrorMessage from "../../Controllers/ErroHandeler/HandelErro";
+import {
+  ReloadFromLocal,
+  saveToLocal,
+  isInLocal,
+} from "../../Controllers/LoadFromLocal";
 
 export default function GoldPriceCard(props) {
   const [isLoading, setIsLoading] = useState(true);
@@ -9,16 +14,23 @@ export default function GoldPriceCard(props) {
   const [errortext, setErrorText] = useState("");
   useEffect(() => {
     let mounted = true;
-    getAllGoldPrice()
-      .then((doc) => {
-        if (mounted) {
-          setPricerow(doc.data);
-          setIsLoading(false);
-        }
-      })
-      .catch((err) => {
-        setErrorText(getErrorMessage(err));
-      });
+    if (!isInLocal("gold")) {
+      getAllGoldPrice()
+        .then((doc) => {
+          if (mounted) {
+            //save to session storage
+            saveToLocal("gold", JSON.stringify(doc.data));
+            setPricerow(doc.data);
+            setIsLoading(false);
+          }
+        })
+        .catch((err) => {
+          setErrorText(getErrorMessage(err));
+        });
+    } else {
+      setPricerow(JSON.parse(ReloadFromLocal("gold")));
+      setIsLoading(false);
+    }
     return () => {
       mounted = false;
     };
@@ -30,7 +42,9 @@ export default function GoldPriceCard(props) {
 
   return (
     <div className={"py-4 px-6 bg-white rounded-md "}>
-      <h2 className={"text-xl text-indigo-500 font-bold "}>Gold</h2>
+      <h2 className={"text-xl text-indigo-500 font-bold "}>
+        Gold <span className={"text-sm"}>(viewing cached)</span>
+      </h2>
       {isLoading ? (
         <div>
           <LoadingComp onerrortext={errortext} />
