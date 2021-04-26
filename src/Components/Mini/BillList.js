@@ -14,7 +14,6 @@ export default function BillList(props) {
 
   useEffect(async () => {
     let mounted = true;
-    let t;
     try {
       let miniBillInfos = await GetMiniBills();
       if (mounted) {
@@ -26,11 +25,6 @@ export default function BillList(props) {
             inline: "center",
             block: "center",
           });
-
-          /*  document.getElementById(globalid).classList.add("bg-yellow-300");
-          t = setTimeout(() => {
-            document.getElementById(globalid).classList.remove("bg-yellow-300");
-          }, 2000); */
         }
       }
     } catch (err) {

@@ -3,9 +3,7 @@ import API from "./APIs/API";
 function InsetBill(payLoad) {
   return new Promise((resolve, reject) => {
     API()
-      .post("/bill/new", {
-        data: payLoad,
-      })
+      .post("/bill/new", payLoad)
       .then((createdBill) => {
         resolve(createdBill.data);
       })
@@ -29,5 +27,32 @@ function GetMiniBills() {
   });
 }
 
-export { InsetBill };
-export { GetMiniBills };
+function updateOneBill(id, payload) {
+  return new Promise((resolve, reject) => {
+    API()
+      .put(`/bill/edit/${id}`, payload)
+      .then((updatedBill) => {
+        resolve(updatedBill.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+  });
+}
+
+function getOneBillById(id) {
+  return new Promise((resolve, reject) => {
+    API()
+      .get(`/bill/${id}`)
+      .then((bill) => {
+        resolve(bill.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+export { InsetBill, updateOneBill };
+export { GetMiniBills, getOneBillById };

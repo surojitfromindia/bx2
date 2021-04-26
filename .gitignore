@@ -1,3 +1,4 @@
 /node_modules
 /.codesandbox
 /build
+/test
