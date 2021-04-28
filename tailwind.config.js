@@ -10,6 +10,7 @@ module.exports = {
       },
       width: {
         "w-25": "9rem",
+        "w-22": "5.5rem",
       },
     },
   },
