@@ -54,5 +54,18 @@ function getOneBillById(id) {
   });
 }
 
-export { InsetBill, updateOneBill };
+function deleteOneBillById(id) {
+  return new Promise((resolve, reject) => {
+    API()
+      .delete(`/bill/${id}`)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+export { InsetBill, updateOneBill, deleteOneBillById };
 export { GetMiniBills, getOneBillById };

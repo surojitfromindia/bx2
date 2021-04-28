@@ -5,7 +5,7 @@ import moment from "moment";
 import LoadingComp from "./LoadingComp";
 import getErrorMessage from "../../Controllers/ErroHandeler/HandelErro";
 
-let globalid = "";
+let globalid;
 export default function BillList(props) {
   const [billlist, setbilllis] = useState([]);
   const [seachFillterList, setseachFillterList] = useState([]);
@@ -20,7 +20,7 @@ export default function BillList(props) {
         setbilllis(miniBillInfos);
         setIsLoading(false);
         if (globalid) {
-          document.getElementById(globalid).scrollIntoView({
+          document.getElementById(globalid)?.scrollIntoView({
             behavior: "smooth",
             inline: "center",
             block: "center",
@@ -31,9 +31,8 @@ export default function BillList(props) {
       setErrorText(getErrorMessage(err));
     }
     return () => {
-      //clearTimeout(t);
       mounted = false;
-      globalid = "";
+      globalid = undefined;
     };
   }, []);
 
@@ -234,9 +233,13 @@ const BillItems = ({ details, onlinkClick }) => {
                 {details?.item_details?.quantity}
                 {details?.item_details?.unit}
               </p>
-              <p className={"text-center"}>{details.payment.tp}</p>
-              <p className={"text-center "}>{details.payment.paidU}</p>
-              <p className={"text-center "}>{details.payment.remain}</p>
+              <p className={"text-center"}>{details.payment?.tp.toFixed(0)}</p>
+              <p className={"text-center "}>
+                {details.payment?.paidU.toFixed(0)}
+              </p>
+              <p className={"text-center "}>
+                {details.payment?.remain.toFixed(0)}
+              </p>
             </div>
           </div>
           <div className={"mt-5 flex flex-col   gap-0.5"}>
@@ -256,11 +259,11 @@ const BillItems = ({ details, onlinkClick }) => {
               </span>
               <span
                 className={
-                  "ml-1 h-8 overflow-hidden  text-xs font-medium text-gray-600"
+                  "ml-1 h-8 overflow-hidden w-72  text-xs font-medium text-gray-600"
                 }
               >
-                Man this is cool as fuck untill this is made.everything shine
-                faster than my whole collection of art. we are good
+                Some info about the product will go here like if it was for
+                repairing.
               </span>
             </div>
           </div>

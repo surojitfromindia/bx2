@@ -4,6 +4,7 @@ import PriceSelect from "./PriceSelect";
 import BottomBar from "./BottomBar";
 import Modal from "../Modal/BillCreationModal";
 import { InsetBill } from "../../Controllers/Bill";
+import { ReloadFromLocal } from "../../Controllers/LoadFromLocal";
 
 let metal_price = {
   gold: 4500,
@@ -188,6 +189,12 @@ export default function CreateBill() {
     calculateNewModelAndText();
   }, [deposite, itemType, subInfos]);
 
+  useEffect(() => {
+    let g = JSON.parse(ReloadFromLocal("gold"))[0];
+    let si = JSON.parse(ReloadFromLocal("silver"))[0];
+    metal_price.gold = Number(g.tfk);
+    metal_price.silver = Number(si.tinker);
+  }, []);
   return (
     <form className={"flex flex-col px-4 py-2"}>
       {showModal ? (
