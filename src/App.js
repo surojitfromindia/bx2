@@ -12,13 +12,14 @@ import {
   isInLocal,
   saveToLocal,
 } from "./Controllers/LoadFromLocal.js";
+import { SetFirstTheme } from "./Hooks/useTheme";
 
 export default function App() {
   const { token, setToken } = useToken();
   const [isLoading, setIsLoading] = useState(true);
   const [errortext, setErrorText] = useState("");
+  SetFirstTheme();
   useEffect(() => {
-    if (!isInLocal("isDark")) saveToLocal("isDark", true);
     API()
       .get("/")
       .then(() => {
@@ -31,7 +32,7 @@ export default function App() {
 
   return isLoading ? (
     <div className={"flex justify-center items-center h-screen"}>
-      <LoadingComp onerrortext={errortext} />
+      <LoadingComp onerrortext={errortext} onloadingtext="Connecting..." />
     </div>
   ) : !token ? (
     <Login setToken={setToken} />

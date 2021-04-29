@@ -43,7 +43,7 @@ export default function GoldPriceCard(props) {
   return (
     <div
       className={
-        "select-none py-4 px-6 transition-colors bg-white dark:bg-gray-700 rounded-md "
+        "select-none max-h-72  py-4 px-6 transition-colors bg-white dark:bg-coolGray-700 rounded-md "
       }
     >
       <h2 className={"text-xl text-indigo-500 dark:text-gray-100 font-bold "}>
@@ -51,11 +51,14 @@ export default function GoldPriceCard(props) {
       </h2>
       {isLoading ? (
         <div>
-          <LoadingComp onerrortext={errortext} />
+          <LoadingComp
+            onerrortext={errortext}
+            onloadingtext="Fetching Data..."
+          />
         </div>
       ) : (
         <div>
-          <table className={"my-4 flex flex-col table-fixed w-full "}>
+          <table className={"my-4 max-h-52 flex flex-col table-fixed w-full "}>
             <thead>
               <tr className={"flex w-full text-left dark:text-pink-400"}>
                 <th className={"w-2/4"}>Date</th>

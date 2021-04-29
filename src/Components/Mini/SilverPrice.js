@@ -42,17 +42,21 @@ export default function SilverPriceCard() {
   return (
     <div
       className={
-        "select-none py-4 px-6 bg-white transition-colors dark:bg-gray-700 rounded-md "
+        "select-none max-h-72 py-4 px-6 bg-white transition-colors dark:bg-coolGray-700 rounded-md "
       }
     >
       <h2 className={"text-xl text-indigo-500 dark:text-gray-100 font-bold"}>
         Silver <span className={"text-sm"}>(viewing cached)</span>
       </h2>
       {isLoading ? (
-        <LoadingComp onerrortext={errortext} />
+        <LoadingComp onerrortext={errortext} onloadingtext="Fetching Data..." />
       ) : (
         <div>
-          <table className={"my-4 flex flex-col table-fixed w-full max-h-50"}>
+          <table
+            className={
+              "my-4 max-h-52 flex flex-col table-fixed w-full max-h-50"
+            }
+          >
             <thead>
               <tr className={"flex w-full text-left dark:text-pink-400"}>
                 <th className={"w-1/2"}>Date</th>

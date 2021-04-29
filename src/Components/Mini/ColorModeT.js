@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { SunIcon, MoonIcon } from "@heroicons/react/solid";
 export default function ColorModeT({ onTog }) {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(
+    JSON.parse(localStorage.getItem("isDark"))
+  );
   const handleTog = () => {
     onTog();
-    setIsDark(!isDark);
+    setIsDark((t)=>!t);
   };
   return (
     <div onClick={handleTog} className={"transition-all "}>

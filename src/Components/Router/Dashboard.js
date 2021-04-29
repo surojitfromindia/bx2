@@ -1,4 +1,10 @@
-import { NavLink, Route, Switch, Redirect } from "react-router-dom";
+import {
+  NavLink,
+  Route,
+  Switch,
+  Redirect,
+  useLocation,
+} from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
 import Home from "./Home";
 import Bills from "./Bill";
@@ -8,30 +14,28 @@ import SingleBill from "../Mini/SingleBill";
 import { MenuIcon, BellIcon, MinusCircleIcon } from "@heroicons/react/solid";
 import NotificationComp from "../Notification/NotificationComp";
 import ColorModeT from "../Mini/ColorModeT";
-import { ReloadFromLocal, saveToLocal } from "../../Controllers/LoadFromLocal";
-
+import { toggleTheme } from "../../Hooks/useTheme";
 var l;
 export default function Dashboard() {
   const noti = useRef();
   const [showMenu, setShowMenu] = useState(false);
+  const [isHeaderDisplay, setIsHeaderDisplay] = useState(true);
   const [showNotification, setShowNotification] = useState(false);
+  const path = useLocation();
 
   useEffect(() => {
-    if (JSON.parse(ReloadFromLocal("isDark")) === true) {
-      l = false;
-      document.body.classList.toggle("dark");
-      document.body.classList.toggle("bg-gray-600");
+    if (path.pathname === "/bill/billlist") {
+      setIsHeaderDisplay(false);
     } else {
-      saveToLocal("isDark", true);
+      setIsHeaderDisplay(true);
     }
-  }, []);
+  }, [path]);
+
   const handleHideAndShow = () => {
     setShowMenu((t) => !t);
   };
   const ToggleColorMode = () => {
-    document.body.classList.toggle("dark");
-    document.body.classList.toggle("bg-gray-600");
-    saveToLocal("isDark", !JSON.parse(ReloadFromLocal("isDark")));
+    toggleTheme();
   };
   const ToggleNotification = () => {
     setShowNotification((t) => !t);
@@ -40,7 +44,11 @@ export default function Dashboard() {
     <div
       className={"transition-colors duration-300 ease-in-out flex flex-col   "}
     >
-      <div className={"p-4 text-gray-100 bg-gray-800"}>
+      <div
+        className={`p-4 ${
+          isHeaderDisplay ? "sticky top-0" : ""
+        }  z-20 text-gray-100 bg-coolGray-700`}
+      >
         <div className={"flex justify-between items-center"}>
           <div>
             <h1>Welcome Surojit</h1>
@@ -54,7 +62,7 @@ export default function Dashboard() {
 
               <div
                 className={
-                  "select-none absolute -top-0.5 -right-0.5 w-4 h-4  bg-red-500 rounded-full bg-clip-content  flex justify-center items-center "
+                  "select-none absolute -top-0.5 -right-0.5 w-4 h-4  bg-red-500 rounded-full flex justify-center items-center "
                 }
               >
                 <span className={"text-xs"}>!</span>
@@ -105,7 +113,7 @@ export default function Dashboard() {
       </div>
       <div
         ref={noti}
-        className={`transition-transform  duration-300 ease-in-out flex flex-col items-center justify-between px-3 py-4 fixed top-20 bottom-20 left-5 right-5 sm:left-44 sm:right-44 
+        className={`z-30 transition-transform duration-300 ease-in-out flex flex-col items-center justify-between px-3 py-4 fixed top-20 bottom-20 left-5 right-5 sm:left-44 sm:right-44 
         transform ${
           showNotification ? "scale-100" : "scale-0"
         } rounded-md border-2 border-blue-300 dark:border-gray-200 bg-blue-500  dark:bg-gray-700  `}

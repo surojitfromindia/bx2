@@ -20,7 +20,6 @@ export default function SingleBill() {
   const [actionModals, setActionModals] = useState();
   const [deleteModalShowing, setDeleteModalShowing] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const timelineref = useRef();
   const history = useHistory();
   //three posaiable dataState
   //1. pending
@@ -34,11 +33,11 @@ export default function SingleBill() {
     getOneBillById(id)
       .then((bill) => {
         setBillDetails(bill);
-        let k = document.body.scrollHeight;
+        /* let k = document.body.scrollHeight;
         window.scrollTo({
           top: k,
           behavior: "smooth",
-        });
+        }); */
       })
       .catch((err) => {
         setErrorText(getErrorMessage(err));
@@ -129,8 +128,8 @@ export default function SingleBill() {
   };
 
   return BillDetails ? (
-    <div className={"flex flex-col py-2.5 items-center "}>
-      <div className={"px-4 py-2  flex flex-col gap-3  md:w-max pb-4 "}>
+    <div className={"flex flex-col py-2.5 items-center"}>
+      <div className={"px-4 py-2   flex flex-col gap-5 md:w-max pb-4 "}>
         <BillInfo details={BillDetails} />
 
         <TimeLine
@@ -141,12 +140,14 @@ export default function SingleBill() {
           payClick={handlePayment}
         />
 
-        <AuthSing
-          deleteAction={handleDelete}
-          ArchiveAction={handleArchive}
-          printAction={handlePrint}
-          isAllActionDisable={isEditing}
-        />
+        <div>
+          <AuthSing
+            deleteAction={handleDelete}
+            ArchiveAction={handleArchive}
+            printAction={handlePrint}
+            isAllActionDisable={isEditing}
+          />
+        </div>
 
         <DeleteActionModal
           modalProps={actionModals}
@@ -164,7 +165,7 @@ export default function SingleBill() {
 }
 
 const BillInfo = ({ details }) => {
-  return <BillItems details={details} />;
+  return <BillItems details={details} isViewButtonHidden="true" />;
 };
 
 const TimeLine = ({ timeline, tp, paidU, dataState, payClick }) => {
@@ -197,11 +198,11 @@ const TimeLine = ({ timeline, tp, paidU, dataState, payClick }) => {
         >
           <div
             className={
-              "shadow overflow-hidden bg-gray-50 dark:bg-gray-700 border-gray-100 rounded-md"
+              "shadow overflow-hidden bg-gray-50 dark:bg-coolGray-700 border-gray-100 rounded-md"
             }
           >
             <table className={"min-w-full"}>
-              <thead className={"bg-blue-500"}>
+              <thead className={"bg-blue-500 dark:bg-lightBlue-600"}>
                 <tr>
                   <th
                     scope="col"
@@ -260,7 +261,7 @@ const TimeLine = ({ timeline, tp, paidU, dataState, payClick }) => {
                           className={`w-14 justify-center py-0.5 inline-flex   text-xs leading-5 font-semibold rounded-sm ${
                             time.remain <= 10
                               ? " bg-green-200 text-green-700 "
-                              : " bg-blue-200 text-blue-700"
+                              : " bg-blue-200 text-blue-700 dark:bg-lightBlue-400 dark:text-lightBlue-900"
                           } `}
                         >
                           {time.remain?.toFixed(0)}
@@ -304,19 +305,19 @@ const TimeLine = ({ timeline, tp, paidU, dataState, payClick }) => {
                 ref={payRef}
                 type="number"
                 className={
-                  "outline-none bg-gray-200 dark:bg-gray-800 dark:placeholder-gray-300 rounded-sm border-none focus:ring-2  focus:ring-blue-400 px-3 py-2 text-sm  flex-1 sm:flex-grow-0 "
+                  "outline-none bg-gray-200  dark:bg-gray-800 dark:text-gray-50 dark:placeholder-gray-300 rounded-sm border-none focus:ring-2  focus:ring-blue-400 px-3 py-2 text-sm  flex-1 sm:flex-grow-0 "
                 }
               ></input>
               <button
                 onClick={onPayClick}
                 type="button"
                 className={
-                  "w-24 focus:outline-none border-none px-1 py-2 text-sm bg-blue-500 hover:opacity-80 focus:ring-2 focus:ring-blue-400 focus:ring-offset-1 font-medium tracking-wider"
+                  "w-24 focus:outline-none border-none px-1 py-2 text-sm bg-blue-500 dark:bg-lightBlue-600 hover:opacity-80 focus:ring-2 focus:ring-blue-400 focus:ring-offset-1 font-medium tracking-wider"
                 }
               >
                 <span
                   className={
-                    " text-sm hover:opacity-80 focus:ring-2 focus:ring-red-400 focus:ring-offset-1 text-gray-50 font-medium tracking-wider"
+                    "text-sm hover:opacity-80 focus:ring-2 focus:ring-red-400 focus:ring-offset-1 text-gray-50 font-medium tracking-wider"
                   }
                 >
                   {buttonText}

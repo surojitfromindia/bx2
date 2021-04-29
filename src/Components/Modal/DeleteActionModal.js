@@ -27,7 +27,7 @@ export default function DeleteActionModal({
       StyleMap.hoverColor = "bg-red-500";
       StyleMap.bgColor = "bg-red-500";
       StyleMap.InbgColor = "bg-red-50";
-      StyleMap.Ring ="ring-red-500"
+
       break;
     }
     case "archive": {
@@ -37,17 +37,17 @@ export default function DeleteActionModal({
       StyleMap.hoverColor = "bg-blue-500";
       StyleMap.bgColor = "bg-blue-500";
       StyleMap.InbgColor = "bg-blue-50";
-      StyleMap.Ring ="ring-blue-500"
+
       break;
     }
     case "print": {
-      StyleMap.textColor = "text-green-50";
-      StyleMap.textColorLight = "text-green-100";
-      StyleMap.IntextColor = "text-green-500";
-      StyleMap.hoverColor = "bg-green-500";
-      StyleMap.bgColor = "bg-green-500";
-      StyleMap.InbgColor = "bg-green-50";
-      StyleMap.Ring ="ring-green-500"
+      StyleMap.textColor = " text-green-50 dark:text-teal-50 ";
+      StyleMap.textColorLight = "text-green-50 dark:text-teal-50";
+      StyleMap.IntextColor = "text-green-500 dark:text-teal-500";
+      StyleMap.hoverColor = "bg-green-500 dark:bg-teal-500";
+      StyleMap.bgColor = "bg-green-500 dark:bg-teal-500";
+      StyleMap.InbgColor = "bg-green-50 dark:bg-teal-50";
+
       break;
     }
   }
@@ -80,7 +80,7 @@ export default function DeleteActionModal({
               className={`flex items-center rounded-sm focus:outline-none  border-none px-2 py-2 text-sm ${StyleMap.InbgColor} hover:opacity-80 focus:ring-2 focus:${StyleMap.bgColor} focus:ring-offset-1 font-medium`}
             >
               <span
-                className={`text-xs hover:opacity-80 focus:ring-2 focus:ring-red-400 focus:ring-offset-1 ${StyleMap.IntextColor} font-medium  tracking-widest`}
+                className={`text-xs hover:opacity-80 focus:outline-none  focus:ring-offset-1 ${StyleMap.IntextColor} font-medium  tracking-widest`}
               >
                 {modalProps?.actionName}
               </span>
