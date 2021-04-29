@@ -27,6 +27,19 @@ function GetMiniBills() {
   });
 }
 
+function GetMiniBillsBy(id) {
+  return new Promise((resolve, reject) => {
+    API()
+      .get(`/bill/mini/${id}`)
+      .then((miniBill) => {
+        resolve(miniBill.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
 function updateOneBill(id, payload) {
   return new Promise((resolve, reject) => {
     API()
@@ -68,4 +81,4 @@ function deleteOneBillById(id) {
 }
 
 export { InsetBill, updateOneBill, deleteOneBillById };
-export { GetMiniBills, getOneBillById };
+export { GetMiniBills, getOneBillById, GetMiniBillsBy };

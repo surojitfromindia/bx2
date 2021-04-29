@@ -15,14 +15,15 @@ import { MenuIcon, BellIcon, MinusCircleIcon } from "@heroicons/react/solid";
 import NotificationComp from "../Notification/NotificationComp";
 import ColorModeT from "../Mini/ColorModeT";
 import { toggleTheme } from "../../Hooks/useTheme";
-var l;
+import { GetMiniBills, GetMiniBillsBy } from "../../Controllers/Bill";
 export default function Dashboard() {
-  const noti = useRef();
   const [showMenu, setShowMenu] = useState(false);
   const [isHeaderDisplay, setIsHeaderDisplay] = useState(true);
   const [showNotification, setShowNotification] = useState(false);
   const path = useLocation();
+  const [list, setlist] = useState([]);
 
+  //make header not to stick if it is in /bill/billist
   useEffect(() => {
     if (path.pathname === "/bill/billlist") {
       setIsHeaderDisplay(false);
@@ -31,8 +32,33 @@ export default function Dashboard() {
     }
   }, [path]);
 
+  //get bills from backend
+  useEffect(async function () {
+    let minibills = await GetMiniBills();
+    setlist(minibills);
+  }, []);
+
+  const handleUpdateOfABill = async (index) => {
+    let element = list[index];
+    GetMiniBillsBy(element._id).then((miniBill) => {
+      let updatedArry = [...list];
+      updatedArry[index] = miniBill;
+      setlist([...updatedArry]);
+    });
+  };
+
+  const handleDelete = (id) => {
+    let updatedArry = list.filter((item) => item._id !== id);
+    console.log(updatedArry);
+    setlist([...updatedArry]);
+  };
+  const handleNewEntry = async () => {
+    let minibills = await GetMiniBills();
+    setlist(minibills);
+  };
+
   const handleHideAndShow = () => {
-    setShowMenu((t) => !t);
+    setShowMenu(!showMenu);
   };
   const ToggleColorMode = () => {
     toggleTheme();
@@ -40,10 +66,9 @@ export default function Dashboard() {
   const ToggleNotification = () => {
     setShowNotification((t) => !t);
   };
+
   return (
-    <div
-      className={"transition-colors duration-300 ease-in-out flex flex-col   "}
-    >
+    <div className={"transition-colors duration-300 ease-in-out flex flex-col"}>
       <div
         className={`p-4 ${
           isHeaderDisplay ? "sticky top-0" : ""
@@ -62,7 +87,7 @@ export default function Dashboard() {
 
               <div
                 className={
-                  "select-none absolute -top-0.5 -right-0.5 w-4 h-4  bg-red-500 rounded-full flex justify-center items-center "
+                  "select-none absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 rounded-full flex justify-center items-center "
                 }
               >
                 <span className={"text-xs"}>!</span>
@@ -101,18 +126,36 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      <div className={""}>
+
+      <div>
         <Switch>
           <Route exact path="/" component={() => <Redirect to="/home" />} />
-          <Route exact path="/home" component={Home} />
-          <Route exact path="/bill" component={() => <Bills />} />
-          <Route exact path="/bill/create" component={CreateBill} />
-          <Route exact path="/bill/billlist" component={BillList} />
-          <Route exact path="/bill/billlist/:id" component={SingleBill} />
+          <Route exact path="/home" render={() => <Home de={list} />} />
+          <Route exact path="/bill" component={Bills} />
+          <Route
+            exact
+            path="/bill/create"
+            render={() => <CreateBill onNewEntry={handleNewEntry} />}
+          />
+          <Route
+            exact
+            path="/bill/billlist"
+            render={() => <BillList list={list} />}
+          />
+          <Route
+            exact
+            path="/bill/billlist/:id/:index"
+            render={() => (
+              <SingleBill
+                onUpdate={handleUpdateOfABill}
+                onDelete={handleDelete}
+              />
+            )}
+          />
         </Switch>
       </div>
+
       <div
-        ref={noti}
         className={`z-30 transition-transform duration-300 ease-in-out flex flex-col items-center justify-between px-3 py-4 fixed top-20 bottom-20 left-5 right-5 sm:left-44 sm:right-44 
         transform ${
           showNotification ? "scale-100" : "scale-0"
