@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { SearchCircleIcon } from "@heroicons/react/outline";
 import { GetMiniBills } from "../../Controllers/Bill";
 import moment from "moment";
 import LoadingComp from "./LoadingComp";
@@ -99,12 +100,17 @@ const SearchBox = ({ billlist, onSearch, onClick }) => {
   return (
     <div className={"group shadow-md"}>
       {/**Search box */}
-      <div className={"h-10 flex p-0 "}>
+      <div
+        className={"h-10 flex p-0 bg-white dark:bg-coolGray-700 items-center"}
+      >
+        <SearchCircleIcon
+          className={"dark:text-gray-50 text-lightBlue-500  w-6 h-6 ml-4"}
+        />
         <input
           onChange={onTextChange}
           ref={searchRef}
           className={
-            "transition-all dark:bg-gray-600 dark:text-gray-50 dark:placeholder-gray-50 duration-400 ease-in-out flex-1 px-5 py-5 md:text-center transform rounded-sm group-hover:rounded-b-none outline-none"
+            "transition-all dark:bg-coolGray-700 dark:text-gray-50 dark:placeholder-gray-50 duration-400 ease-in-out flex-1 px-2 md:text-center transform rounded-sm group-hover:rounded-b-none outline-none"
           }
           placeholder="Search..."
         ></input>
@@ -112,22 +118,34 @@ const SearchBox = ({ billlist, onSearch, onClick }) => {
       {/**Searchbox drop down */}
       <div
         className={
-          "flex flex-col gap-1.5 transition-all duration-300 ease-in-out transform h-0 group-hover:h-32  py-0 group-hover:py-3 bg-white dark:bg-gray-600 rounded-b-sm overflow-scroll no-scrollbar"
+          "flex flex-col items-center gap-1.5 transition-all duration-300 ease-in-out transform h-0 group-hover:h-32  py-0 group-hover:py-3 bg-white dark:bg-coolGray-700 rounded-b-sm overflow-scroll no-scrollbar"
         }
       >
-        {billlist.map((billdetails) => (
-          <SuperMini
-            details={billdetails}
-            key={billdetails._id}
-            onClick={onClick}
-          />
-        ))}
+        {billlist.length === 0 && searchRef.current.value !== "" ? (
+          <div className={"dark:text-gray-50 text-gray-600"}>
+            {`${
+              !searchRef.current.value
+                ? ""
+                : `Sorry! No record found on "${searchRef.current.value}"`
+            }`}
+          </div>
+        ) : (
+          <div className={"w-full px-1.5"}>
+            {billlist.map((billdetails) => (
+              <SuperMini
+                details={billdetails}
+                key={billdetails._id}
+                onClick={onClick}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-const BillItems = ({ details, onlinkClick }) => {
+const BillItems = ({ details, onlinkClick, isViewButtonHidden = false }) => {
   const handleOnLinkClick = () => {
     onlinkClick?.(details._id);
   };
@@ -135,7 +153,7 @@ const BillItems = ({ details, onlinkClick }) => {
     <div
       id={details._id}
       className={
-        "group select-none transition-colors ease-in-out duration-200 rounded-md flex flex-col gap-3 justify-between shadow-md  bg-gray-50 dark:bg-gray-700"
+        "group select-none transition-colors ease-in-out duration-200 rounded-md flex flex-col gap-3 justify-between shadow-md  bg-gray-50 dark:bg-coolGray-700"
       }
     >
       <div
@@ -257,7 +275,7 @@ const BillItems = ({ details, onlinkClick }) => {
               </span>
               <span
                 className={
-                  "ml-1  text-xs font-medium text-gray-600 dark:text-green-100"
+                  "ml-1  text-xs font-medium text-gray-600 dark:text-lightBlue-100"
                 }
               >
                 {details.customer_contact ? (
@@ -277,7 +295,7 @@ const BillItems = ({ details, onlinkClick }) => {
               </span>
               <span
                 className={
-                  "ml-1 h-8 overflow-hidden w-72  text-xs font-medium text-gray-600 dark:text-green-100"
+                  "ml-1 h-8 overflow-hidden w-72  text-xs font-medium text-gray-600 dark:text-lightBlue-100"
                 }
               >
                 Some info about the product will go here like if it was for
@@ -292,8 +310,9 @@ const BillItems = ({ details, onlinkClick }) => {
         <Link
           onClick={handleOnLinkClick}
           to={`/bill/billlist/${details._id}`}
+          hidden={isViewButtonHidden}
           className={
-            "text-center flex-grow rounded-b-md focus:outline-none focus:border-none px-4 py-1 text-sm text-green-50 dark:text-green-50 font-medium bg-gray-600 dark:bg-green-600 hover:bg-gray-700 dark:hover:bg-green-500 shadow-md"
+            "text-center flex-grow rounded-b-md focus:outline-none focus:border-none px-4 py-1.5 text-sm text-green-50 dark:text-green-50 font-medium bg-gray-600 dark:bg-lightBlue-600 hover:bg-gray-700 dark:hover:bg-lightBlue-500 shadow-md"
           }
         >
           view
@@ -311,12 +330,12 @@ const SuperMini = ({ details, onClick }) => {
     <div
       onClick={onIClick}
       className={
-        "transition-colors ease-in-out duration-200 cursor-pointer dark:bg-gray-800 flex px-3 py-1.5 flex-row hover:bg-gray-300 dark:hover:bg-gray-700 justify-between"
+        "transition-colors ease-in-out duration-200 cursor-pointer dark:bg-coolGray-700 flex px-3 py-1.5 flex-row hover:bg-gray-300 dark:hover:bg-coolGray-800 justify-between"
       }
     >
       <p
         className={
-          "text-gray-700 dark:text-gray-100 font-medium text-sm flex items-baseline "
+          "text-gray-700 dark:text-gray-50 font-medium text-sm flex items-baseline "
         }
       >
         <span className={"overflow-x-auto"}>
@@ -324,7 +343,7 @@ const SuperMini = ({ details, onClick }) => {
         </span>
         <span
           className={
-            "group-hover:text-red-600 text-xs ml-1.5 text-gray-600 font-bold"
+            "group-hover:text-red-600 dark:group-hover:text-yellow-300 text-xs ml-1.5 text-gray-600  font-bold"
           }
         >
           {details.item_details.name
