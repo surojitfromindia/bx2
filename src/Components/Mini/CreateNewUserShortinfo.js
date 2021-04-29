@@ -2,7 +2,11 @@ import { Link, useRouteMatch } from "react-router-dom";
 export default function BSI({ infos }) {
   const { url } = useRouteMatch();
   return (
-    <div className={"px-4 py-4 rounded border-xl bg-gray-600 shadow"}>
+    <div
+      className={
+        "px-4 py-4 rounded border-xl bg-gray-600 dark:bg-gray-700 shadow"
+      }
+    >
       <div>
         <h2 className={"text-xl text-gray-50 font-semibold tracking-wide"}>
           View Bills

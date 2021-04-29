@@ -3,14 +3,12 @@ import { MailIcon } from "@heroicons/react/solid";
 
 export default function NotificationComp() {
   return (
-    <div
-      className={"flex h-screen w-screen flex-col justify-center items-center "}
-    >
-      <MailIcon className={"h-6 w-6 text-gray-500 mb-2.5"} />
-      <span className={"text-lg font-semibold text-gray-700"}>
+    <div className={"flex flex-col w-full justify-center items-center "}>
+      <MailIcon className={"h-6 w-6 text-gray-50 mb-2"} />
+      <span className={"text-lg font-semibold text-gray-50"}>
         Your Notification Will Be Here.
       </span>
-      <span className={"text-sm font-medium text-gray-500"}> (WoIP)</span>
+      <span className={"text-sm font-medium text-gray-100"}> (WoIP)</span>
     </div>
   );
 }

@@ -104,7 +104,7 @@ const SearchBox = ({ billlist, onSearch, onClick }) => {
           onChange={onTextChange}
           ref={searchRef}
           className={
-            "transition-all duration-400 ease-in-out flex-1 px-5 py-5 md:text-center transform rounded-sm group-hover:rounded-b-none outline-none"
+            "transition-all dark:bg-gray-600 dark:text-gray-50 dark:placeholder-gray-50 duration-400 ease-in-out flex-1 px-5 py-5 md:text-center transform rounded-sm group-hover:rounded-b-none outline-none"
           }
           placeholder="Search..."
         ></input>
@@ -112,7 +112,7 @@ const SearchBox = ({ billlist, onSearch, onClick }) => {
       {/**Searchbox drop down */}
       <div
         className={
-          "flex flex-col gap-1.5 transition-all duration-300 ease-in-out transform h-0 group-hover:h-32  py-0 group-hover:py-3 bg-white rounded-b-sm overflow-scroll no-scrollbar"
+          "flex flex-col gap-1.5 transition-all duration-300 ease-in-out transform h-0 group-hover:h-32  py-0 group-hover:py-3 bg-white dark:bg-gray-600 rounded-b-sm overflow-scroll no-scrollbar"
         }
       >
         {billlist.map((billdetails) => (
@@ -135,10 +135,14 @@ const BillItems = ({ details, onlinkClick }) => {
     <div
       id={details._id}
       className={
-        "group transition-colors ease-in-out duration-200 rounded-md flex flex-col gap-3 justify-between shadow-md  bg-gray-50 hover:bg-gray-100 "
+        "group select-none transition-colors ease-in-out duration-200 rounded-md flex flex-col gap-3 justify-between shadow-md  bg-gray-50 dark:bg-gray-700"
       }
     >
-      <div className={"flex pt-5 px-3 flex-col divide-y divide-gray-200"}>
+      <div
+        className={
+          "flex pt-5 px-3 flex-col divide-y divide-gray-200 dark:divide-gray-500"
+        }
+      >
         <div className={"flex justify-between gap-3 items-center"}>
           <div className={"flex justify-between gap-1"}>
             <p className={"text-sm"}>
@@ -203,13 +207,13 @@ const BillItems = ({ details, onlinkClick }) => {
         <div className={"mt-3"}>
           <p
             className={
-              "text-gray-700 mt-1.5 font-medium text-base flex items-baseline "
+              "text-gray-700 dark:text-gray-50 mt-1.5 font-medium text-base flex items-baseline "
             }
           >
             {details.customer_name.toUpperCase()}
             <span
               className={
-                "group-hover:text-red-600 text-xs ml-2.5 text-gray-600 font-bold"
+                "group-hover:text-red-600 dark:group-hover:text-yellow-300 text-xs ml-2.5 text-gray-600 dark:text-gray-100 font-bold"
               }
             >
               {details.item_details.name
@@ -218,7 +222,11 @@ const BillItems = ({ details, onlinkClick }) => {
             </span>
           </p>
           <div className={"mt-1 -ml-3 grid grid-rows-2 gap-1"}>
-            <div className={"grid w-72 grid-cols-4 text-xs text-gray-500"}>
+            <div
+              className={
+                "grid w-72 grid-cols-4 text-xs text-gray-500 dark:text-gray-50"
+              }
+            >
               <p className={"text-center"}>Weight</p>
               <p className={"text-center"}>Billed</p>
               <p className={"text-center"}>Paid</p>
@@ -226,7 +234,7 @@ const BillItems = ({ details, onlinkClick }) => {
             </div>
             <div
               className={
-                "grid divide-x divide-gray-300  w-72 grid-cols-4 text-xs font-semibold text-gray-600"
+                "grid divide-x divide-gray-300  w-72 grid-cols-4 text-xs font-semibold text-gray-600 dark:text-gray-100"
               }
             >
               <p className={"text-center"}>
@@ -244,8 +252,14 @@ const BillItems = ({ details, onlinkClick }) => {
           </div>
           <div className={"mt-5 flex flex-col   gap-0.5"}>
             <div className={"flex text-xs "}>
-              <span className={"w-16  text-gray-500"}>Contacts :</span>
-              <span className={"ml-1  text-xs font-medium text-gray-600"}>
+              <span className={"w-16  text-gray-500 dark:text-green-50"}>
+                Contacts :
+              </span>
+              <span
+                className={
+                  "ml-1  text-xs font-medium text-gray-600 dark:text-green-100"
+                }
+              >
                 {details.customer_contact ? (
                   details.customer_contact.toUpperCase()
                 ) : (
@@ -254,12 +268,16 @@ const BillItems = ({ details, onlinkClick }) => {
               </span>
             </div>
             <div className={"flex flex-row text-xs"}>
-              <span className={"w-16 flex-shrink-0  text-gray-500"}>
+              <span
+                className={
+                  "w-16 flex-shrink-0  text-gray-500 dark:text-green-50"
+                }
+              >
                 Remarks :
               </span>
               <span
                 className={
-                  "ml-1 h-8 overflow-hidden w-72  text-xs font-medium text-gray-600"
+                  "ml-1 h-8 overflow-hidden w-72  text-xs font-medium text-gray-600 dark:text-green-100"
                 }
               >
                 Some info about the product will go here like if it was for
@@ -275,7 +293,7 @@ const BillItems = ({ details, onlinkClick }) => {
           onClick={handleOnLinkClick}
           to={`/bill/billlist/${details._id}`}
           className={
-            "text-center flex-grow rounded-b-md focus:outline-none focus:border-none px-4 py-1 text-sm text-green-50 font-medium bg-gray-600 hover:bg-gray-700 shadow-md"
+            "text-center flex-grow rounded-b-md focus:outline-none focus:border-none px-4 py-1 text-sm text-green-50 dark:text-green-50 font-medium bg-gray-600 dark:bg-green-600 hover:bg-gray-700 dark:hover:bg-green-500 shadow-md"
           }
         >
           view
@@ -293,10 +311,14 @@ const SuperMini = ({ details, onClick }) => {
     <div
       onClick={onIClick}
       className={
-        "transition-colors ease-in-out duration-200 cursor-pointer flex px-3 py-1.5 flex-row hover:bg-gray-300 justify-between"
+        "transition-colors ease-in-out duration-200 cursor-pointer dark:bg-gray-800 flex px-3 py-1.5 flex-row hover:bg-gray-300 dark:hover:bg-gray-700 justify-between"
       }
     >
-      <p className={"text-gray-700 font-medium text-sm flex items-baseline "}>
+      <p
+        className={
+          "text-gray-700 dark:text-gray-100 font-medium text-sm flex items-baseline "
+        }
+      >
         <span className={"overflow-x-auto"}>
           {details.customer_name.toUpperCase()}
         </span>

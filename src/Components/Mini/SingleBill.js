@@ -197,7 +197,7 @@ const TimeLine = ({ timeline, tp, paidU, dataState, payClick }) => {
         >
           <div
             className={
-              "shadow  overflow-hidden border-b bg-gray-50 border-gray-100 rounded-md"
+              "shadow overflow-hidden bg-gray-50 dark:bg-gray-700 border-gray-100 rounded-md"
             }
           >
             <table className={"min-w-full"}>
@@ -229,19 +229,23 @@ const TimeLine = ({ timeline, tp, paidU, dataState, payClick }) => {
                   </th>
                 </tr>
               </thead>
-              <tbody className={"divide-y divide-gray-300"}>
+              <tbody
+                className={"divide-y divide-gray-300 dark:divide-gray-600"}
+              >
                 {timeline.map((time, index) => (
                   <tr
                     key={index}
                     className={
-                      " transition-colors ease-in-out duration-300 transform bg-none hover:bg-gray-300"
+                      " transition-colors ease-in-out duration-300 transform bg-none hover:bg-gray-300 dark:hover:bg-gray-800"
                     }
                   >
                     <td className={"px-6 py-2 whitespace-nowrap"}>
                       <div className={"flex items-center"}>
                         <div className={""}>
                           <div
-                            className={"text-sm font-semibold text-gray-500"}
+                            className={
+                              "text-sm font-semibold text-gray-500 dark:text-gray-50"
+                            }
                           >
                             {utc(time.date).format("DD-MM-YYYY")}
                           </div>
@@ -266,18 +270,18 @@ const TimeLine = ({ timeline, tp, paidU, dataState, payClick }) => {
                     <td className={"px-6 text-right py-2 whitespace-nowrap"}>
                       <div
                         className={
-                          "text-sm tracking-wider font-semibold text-blue-700"
+                          "text-sm tracking-wider font-semibold text-blue-700 dark:text-blue-200"
                         }
                       >
                         {index === timeline.length - 1 ? (
                           <span
-                            className={`text-xs font-medium mr-1 ${
+                            className={`text-xs font-medium mr-1 inline-flex items-center ${
                               time.remain <= 10
-                                ? " text-green-700 "
-                                : " text-red-700"
+                                ? " text-green-700 dark:text-yellow-300 "
+                                : " text-red-700 dark:text-white  dark:bg-pink-500 px-1.5"
                             }  `}
                           >
-                            + {paidU}
+                            +{paidU}
                           </span>
                         ) : (
                           ""
@@ -300,7 +304,7 @@ const TimeLine = ({ timeline, tp, paidU, dataState, payClick }) => {
                 ref={payRef}
                 type="number"
                 className={
-                  "outline-none bg-gray-200 rounded-sm border-none focus:ring-2  focus:ring-blue-400 px-3 py-2 text-sm  flex-1 sm:flex-grow-0 "
+                  "outline-none bg-gray-200 dark:bg-gray-800 dark:placeholder-gray-300 rounded-sm border-none focus:ring-2  focus:ring-blue-400 px-3 py-2 text-sm  flex-1 sm:flex-grow-0 "
                 }
               ></input>
               <button

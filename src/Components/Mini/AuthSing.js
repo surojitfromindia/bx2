@@ -26,7 +26,11 @@ export default function AuthSing({
   };
 
   return (
-    <div className={"flex flex-col rounded-md bg-gray-50 shadow-md px-3 py-2"}>
+    <div
+      className={
+        "flex flex-col rounded-md bg-gray-50 dark:bg-gray-700 shadow-md px-3 py-2"
+      }
+    >
       <div
         onClick={() => {
           window.scrollBy(0, document.body.scrollHeight);
@@ -35,25 +39,31 @@ export default function AuthSing({
         className={"flex flex-row justify-between items-center px-1"}
       >
         <span
-          className={"my-0.5 text-lg text-gray-600 tracking-wide font-medium"}
+          className={
+            "my-0.5 text-lg text-gray-600 dark:text-gray-200 tracking-wide font-medium"
+          }
         >
           Options
         </span>
         <ChevronDownIcon
           className={`transition-all duration-300 ease-in-out h-4 w-4 my-0.5 transform ${
             isExpanded ? "rotate-0" : "-rotate-90"
-          }  text-lg text-gray-600 tracking-wide font-medium`}
+          }  text-lg text-gray-600 dark:text-gray-200 tracking-wide font-medium`}
         />
       </div>
 
       <div
-        className={`flex flex-col divide-y divide-gray-200 transition-all ease-in-out duration-200 transform ${
+        className={`flex flex-col divide-y divide-gray-200 dark:divide-gray-600 transition-all ease-in-out duration-200 transform ${
           isExpanded ? "max-h-72" : "max-h-0"
         }  overflow-hidden  `}
       >
-        <div className="flex-shrink flex flex-row justify-between items-center py-2 px-1">
+        <div className="flex flex-row justify-between items-center py-2 px-1">
           <div className={"flex-1 flex flex-col pr-20"}>
-            <span className={"text-sm font-semibold gap-2 text-green-600"}>
+            <span
+              className={
+                "text-sm font-semibold gap-2 text-green-600 dark:text-green-200"
+              }
+            >
               Print
             </span>
             <span className={"text-xs  text-gray-400"}>
@@ -67,7 +77,7 @@ export default function AuthSing({
               onClick={onPrint}
               type="button"
               className={
-                "w-14 flex items-center  rounded-sm focus:outline-none border-none px-1.5 py-1.5 text-sm bg-green-500 hover:opacity-80 focus:ring-2 focus:ring-green-400 focus:ring-offset-1 text-red-700 font-medium tracking-wider"
+                "w-14 flex items-center  rounded-sm focus:outline-none border-none px-1.5 py-1.5 text-sm bg-green-500 hover:opacity-80 focus:ring-2 focus:ring-green-400 focus:ring-offset-1  font-medium tracking-wider"
               }
             >
               <span>
@@ -85,7 +95,11 @@ export default function AuthSing({
         </div>
         <div className="flex flex-row justify-between items-center py-2 px-1">
           <div className={"flex-1 flex flex-col pr-20"}>
-            <span className={"text-sm font-semibold text-gray-600"}>
+            <span
+              className={
+                "text-sm font-semibold text-gray-600 dark:text-gray-200"
+              }
+            >
               Archive
             </span>
             <span className={"text-xs text-gray-400"}>
@@ -116,7 +130,11 @@ export default function AuthSing({
         </div>
         <div className="flex flex-row justify-between items-center py-2 px-1">
           <div className={"flex-1 flex flex-col pr-20"}>
-            <span className={"text-sm font-medium gap-2 text-red-600"}>
+            <span
+              className={
+                "text-sm font-medium gap-2 text-red-600 dark:text-red-200"
+              }
+            >
               Delete
             </span>
             <span className={"text-xs   text-gray-400"}>
