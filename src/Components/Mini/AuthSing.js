@@ -40,16 +40,16 @@ export default function AuthSing({
           Options
         </span>
         <ChevronDownIcon
-          className={`transition-all delay-200 ease-in-out h-4 w-4 my-0.5 transform ${
+          className={`transition-all duration-300 ease-in-out h-4 w-4 my-0.5 transform ${
             isExpanded ? "rotate-0" : "-rotate-90"
           }  text-lg text-gray-600 tracking-wide font-medium`}
         />
       </div>
 
       <div
-        className={`flex flex-col divide-y divide-gray-200 transition-height transform ${
-          isExpanded ? "h-0" : "h-52"
-        }  overflow-hidden `}
+        className={`flex flex-col divide-y divide-gray-200 transition-all ease-in-out duration-200 transform ${
+          isExpanded ? "max-h-72" : "max-h-0"
+        }  overflow-hidden  `}
       >
         <div className="flex-shrink flex flex-row justify-between items-center py-2 px-1">
           <div className={"flex-1 flex flex-col pr-20"}>
@@ -57,8 +57,8 @@ export default function AuthSing({
               Print
             </span>
             <span className={"text-xs  text-gray-400"}>
-              Download this bill as a printable pdf format & save into device or
-              share to a customer.
+              Download this bill as a printable pdf format & share with the
+              customer.
             </span>
           </div>
           <div>
@@ -89,8 +89,7 @@ export default function AuthSing({
               Archive
             </span>
             <span className={"text-xs text-gray-400"}>
-              Archive this bill. This bill will not show-up in list. Best use
-              this when a bill has been paid long ago.
+              Archive this bill. This bill will not show-up in list.
             </span>
           </div>
           <div>
@@ -121,8 +120,7 @@ export default function AuthSing({
               Delete
             </span>
             <span className={"text-xs   text-gray-400"}>
-              delete this bill will remove this bill from database, recovering
-              is not possible.
+              deleting this bill will remove this bill permanently from database
             </span>
           </div>
           <div>

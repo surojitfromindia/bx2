@@ -5,6 +5,8 @@ import Bills from "./Bill";
 import CreateBill from "../Mini/CreateBill";
 import BillList from "../Mini/BillList";
 import SingleBill from "../Mini/SingleBill";
+import { MenuIcon, BellIcon } from "@heroicons/react/solid";
+import NotificationComp from "../Notification/NotificationComp";
 
 export default function Dashboard() {
   const [showMenu, setShowMenu] = useState(false);
@@ -14,70 +16,58 @@ export default function Dashboard() {
 
   return (
     <div className={"flex flex-col"}>
-      <div className={"p-4 text-gray-100 bg-gray-700"}>
+      <div className={"p-4 text-gray-100 bg-gray-800"}>
         <div className={"flex justify-between items-center"}>
-          <h1>Welcome Surojit</h1>
-          <div className={"flex justify-between items-center"}>
-            <div className={"group mr-2  items-center hidden"}>
-              <input
-                type="text"
-                name="search"
-                placeholder={"search.."}
+          <div>
+            <h1>Welcome Surojit</h1>
+          </div>
+          <div
+            className={"flex-shrink-0 flex justify-between gap-1 items-center"}
+          >
+            <div className={"relative"}>
+              <NavLink to="/home/notification">
+                <BellIcon className={"w-6 h-6"} />
+              </NavLink>
+              <div
                 className={
-                  "rounded-sm transition-width  duration-300 ease-out transform w-20 group-hover:w-52  px-3 py-0.5 text-gray-600 "
+                  "absolute -top-0.5 -right-0.5 w-4 h-4  bg-red-500 rounded-full bg-clip-content  flex justify-center items-center "
                 }
-              ></input>
+              >
+                <span className={"text-xs"}>!</span>
+              </div>
             </div>
-            <p
-              className={"cursor-pointer select-none"}
-              onClick={handleHideAndShow}
-            >
-              <svg viewBox={"0 0 100 80"} fill={"white"} width={20} height={20}>
-                <rect x={40} width={100} height={15}></rect>
-                <rect y={30} width={100} height={15}></rect>
-                <rect x={40} y={60} width={100} height={15}></rect>
-              </svg>
-            </p>
+
+            <MenuIcon onClick={handleHideAndShow} className={"w-6 h-6"} />
           </div>
         </div>
 
         <div
-          className={`transition-height duration-300 ease-in-out transform ${
-            showMenu ? "h-12 " : "h-0"
+          className={`transition-all duration-300 ease-in-out transform ${
+            showMenu ? "max-h-12 " : "max-h-0"
           }  overflow-hidden`}
         >
           <div className={"flex justify-between text-md"}>
-            <div className={"w-2/3 flex mt-3 items-center"}>
+            <div className={"flex w-max mt-3 items-center gap-3"}>
               <NavLink
                 to="/home"
-                className={"px-3 py-1"}
+                className={""}
                 activeClassName={
-                  "px-3 py-1 text-gray-700 bg-gray-100 rounded-sm"
+                  " px-3 py-1 text-gray-800 bg-gray-100 text-base t rounded-sm"
                 }
               >
                 Home
               </NavLink>
               <NavLink
                 to="/bill"
-                className={"px-3 py-1"}
+                className={""}
                 activeClassName={
-                  "px-3 py-1 text-gray-700 bg-gray-100 rounded-sm"
+                  " px-3 py-1 text-gray-800 bg-gray-100 rounded-sm text-base"
                 }
               >
                 Bills
               </NavLink>
             </div>
-            <div className={"w-1/3  flex mt-3 justify-end items-center"}>
-              <NavLink
-                to="/preference"
-                className={"px-3 py-1"}
-                activeClassName={
-                  "px-3 py-1 text-gray-700 bg-gray-100 rounded-sm"
-                }
-              >
-                Preference
-              </NavLink>
-            </div>
+            <div className={"w-1/3  flex mt-3 justify-end items-center"}></div>
           </div>
         </div>
       </div>
@@ -85,6 +75,7 @@ export default function Dashboard() {
         <Switch>
           <Route exact path="/" component={() => <Redirect to="/home" />} />
           <Route exact path="/home" component={Home} />
+          <Route exact path="/home/notification" component={NotificationComp} />
           <Route exact path="/bill" component={() => <Bills />} />
           <Route exact path="/bill/create" component={CreateBill} />
           <Route exact path="/bill/billlist" component={BillList} />
