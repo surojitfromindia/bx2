@@ -14,7 +14,7 @@ let metal_price = {
 
 let finalBill = {};
 
-export default function CreateBill() {
+export default function CreateBill({ onNewEntry }) {
   let history = useHistory();
   const handleback = () => {
     history.goBack();
@@ -175,6 +175,7 @@ export default function CreateBill() {
           buttontext: "Purchased",
           statustext: `Succesfull, bill created [${message}]`,
         });
+        onNewEntry();
       })
       .catch((err) => {
         setCheckinState({

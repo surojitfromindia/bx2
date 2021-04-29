@@ -5,7 +5,7 @@ import {
   ArrowCircleLeftIcon,
   ArrowCircleRightIcon,
 } from "@heroicons/react/solid";
-export default function Home(props) {
+export default function Home({ de }) {
   //props
   let infos = {
     tbc: 3,
@@ -30,7 +30,7 @@ export default function Home(props) {
         Recently Added
       </span>
       <div id="recard" className={"relative overflow-x-auto no-scrollbar  "}>
-        <RecentlyCreatedBill />
+        <RecentlyCreatedBill list={de} />
       </div>
       <div className="hidden sm:flex justify-between -mt-9 z-10 pointer-events-none">
         <span className={" pointer-events-auto  "}>
