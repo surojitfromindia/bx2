@@ -34,8 +34,9 @@ export default function SingleBill() {
     getOneBillById(id)
       .then((bill) => {
         setBillDetails(bill);
+        let k = document.body.scrollHeight;
         window.scrollTo({
-          top: timelineref.current.scrollHeight,
+          top: k,
           behavior: "smooth",
         });
       })
@@ -128,25 +129,25 @@ export default function SingleBill() {
   };
 
   return BillDetails ? (
-    <div className={"flex items-center justify-center "}>
-      <div className={"px-4 py-2  flex flex-col gap-5  md:w-max pb-4 "}>
+    <div className={"flex flex-col py-2.5 items-center "}>
+      <div className={"px-4 py-2  flex flex-col gap-3  md:w-max pb-4 "}>
         <BillInfo details={BillDetails} />
 
-        <div ref={timelineref}>
-          <TimeLine
-            timeline={BillDetails.payment.timeline}
-            tp={BillDetails.payment.tp}
-            paidU={BillDetails.payment.paidU}
-            dataState={tranStatus}
-            payClick={handlePayment}
-          />
-        </div>
+        <TimeLine
+          timeline={BillDetails.payment.timeline}
+          tp={BillDetails.payment.tp}
+          paidU={BillDetails.payment.paidU}
+          dataState={tranStatus}
+          payClick={handlePayment}
+        />
+
         <AuthSing
           deleteAction={handleDelete}
           ArchiveAction={handleArchive}
           printAction={handlePrint}
           isAllActionDisable={isEditing}
         />
+
         <DeleteActionModal
           modalProps={actionModals}
           action={actionModals?.action}

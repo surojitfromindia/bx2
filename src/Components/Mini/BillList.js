@@ -135,7 +135,7 @@ const BillItems = ({ details, onlinkClick }) => {
     <div
       id={details._id}
       className={
-        "group transition-colors ease-in-out duration-200 rounded-md flex flex-col gap-3 justify-between shadow-md  bg-gray-100 hover:bg-yellow-300 "
+        "group transition-colors ease-in-out duration-200 rounded-md flex flex-col gap-3 justify-between shadow-md  bg-gray-50 hover:bg-gray-100 "
       }
     >
       <div className={"flex pt-5 px-3 flex-col divide-y divide-gray-200"}>
