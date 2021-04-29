@@ -21,51 +21,54 @@ export default function DeleteActionModal({
   let StyleMap = {};
   switch (modalProps?.actionName.toLowerCase()) {
     case "delete": {
-      StyleMap.textColor = "-red-50";
-      StyleMap.textColorLight = "-red-100";
-      StyleMap.IntextColor = "-red-500";
-      StyleMap.hoverColor = "-red-500";
-      StyleMap.bgColor = "-red-500";
-      StyleMap.InbgColor = "-red-50";
+      StyleMap.textColor = "text-red-50";
+      StyleMap.textColorLight = "text-red-100";
+      StyleMap.IntextColor = "text-red-500";
+      StyleMap.hoverColor = "bg-red-500";
+      StyleMap.bgColor = "bg-red-500";
+      StyleMap.InbgColor = "bg-red-50";
+      StyleMap.Ring ="ring-red-500"
       break;
     }
     case "archive": {
-      StyleMap.textColor = "-blue-50";
-      StyleMap.textColorLight = "-blue-100";
-      StyleMap.IntextColor = "-blue-500";
-      StyleMap.hoverColor = "-blue-500";
-      StyleMap.bgColor = "-blue-500";
-      StyleMap.InbgColor = "-blue-50";
+      StyleMap.textColor = "text-blue-50";
+      StyleMap.textColorLight = "text-blue-100";
+      StyleMap.IntextColor = "text-blue-500";
+      StyleMap.hoverColor = "bg-blue-500";
+      StyleMap.bgColor = "bg-blue-500";
+      StyleMap.InbgColor = "bg-blue-50";
+      StyleMap.Ring ="ring-blue-500"
       break;
     }
     case "print": {
-      StyleMap.textColor = "-green-50";
-      StyleMap.textColorLight = "-green-100";
-      StyleMap.IntextColor = "-green-500";
-      StyleMap.hoverColor = "-green-500";
-      StyleMap.bgColor = "-green-500";
-      StyleMap.InbgColor = "-green-50";
+      StyleMap.textColor = "text-green-50";
+      StyleMap.textColorLight = "text-green-100";
+      StyleMap.IntextColor = "text-green-500";
+      StyleMap.hoverColor = "bg-green-500";
+      StyleMap.bgColor = "bg-green-500";
+      StyleMap.InbgColor = "bg-green-50";
+      StyleMap.Ring ="ring-green-500"
       break;
     }
   }
 
   return (
     <div
-      className={`transition-all duration-700 delay-75 ease-in-out  transform ${
+      className={`transition-all duration-700  ease-in-out  transform ${
         isShowing ? "max-h-52" : "max-h-0 "
-      } fixed bottom-0 bg${
+      } fixed bottom-0 ${
         StyleMap.bgColor
       } left-0 box-content right-0 mx-2 overflow-hidden sm:w-80 mb-7  rounded-md shadow-lg `}
     >
       <div className={`flex justify-between px-4 py-4`}>
         <div className={"flex flex-col w-3/4"}>
           <span
-            className={`text-lg font-semibold leading-6 tracking-wider text${StyleMap.textColor}`}
+            className={`text-lg font-semibold leading-6 tracking-wider ${StyleMap.textColor}`}
           >
             {modalProps?.actionName}?
           </span>
           <span
-            className={`text-sm  overflow-hidden max-h-20 tracking-wide break-words  text${StyleMap.textColorLight}`}
+            className={`text-sm  overflow-hidden max-h-20 tracking-wide break-words  ${StyleMap.textColorLight}`}
           >
             {modalProps?.message}
           </span>
@@ -74,10 +77,10 @@ export default function DeleteActionModal({
               ref={actionButtonRef}
               onClick={onActionClick}
               type="button"
-              className={`flex items-center rounded-sm focus:outline-none  border-none px-2 py-2 text-sm bg${StyleMap.InbgColor} hover:opacity-80 focus:ring-2 focus:ring${StyleMap.bgColor} focus:ring-offset-1 font-medium`}
+              className={`flex items-center rounded-sm focus:outline-none  border-none px-2 py-2 text-sm ${StyleMap.InbgColor} hover:opacity-80 focus:ring-2 focus:${StyleMap.bgColor} focus:ring-offset-1 font-medium`}
             >
               <span
-                className={`text-xs hover:opacity-80 focus:ring-2 focus:ring-red-400 focus:ring-offset-1 text${StyleMap.IntextColor} font-medium  tracking-widest`}
+                className={`text-xs hover:opacity-80 focus:ring-2 focus:ring-red-400 focus:ring-offset-1 ${StyleMap.IntextColor} font-medium  tracking-widest`}
               >
                 {modalProps?.actionName}
               </span>

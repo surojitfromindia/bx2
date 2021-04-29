@@ -41,8 +41,12 @@ export default function GoldPriceCard(props) {
   };
 
   return (
-    <div className={"py-4 px-6 bg-white rounded-md "}>
-      <h2 className={"text-xl text-indigo-500 font-bold "}>
+    <div
+      className={
+        "select-none py-4 px-6 transition-colors bg-white dark:bg-gray-700 rounded-md "
+      }
+    >
+      <h2 className={"text-xl text-indigo-500 dark:text-gray-100 font-bold "}>
         Gold <span className={"text-sm"}>(viewing cached)</span>
       </h2>
       {isLoading ? (
@@ -53,7 +57,7 @@ export default function GoldPriceCard(props) {
         <div>
           <table className={"my-4 flex flex-col table-fixed w-full "}>
             <thead>
-              <tr className={"flex w-full text-left"}>
+              <tr className={"flex w-full text-left dark:text-pink-400"}>
                 <th className={"w-2/4"}>Date</th>
                 <th className={"w-1/4"}>24K/g</th>
                 <th className={"w-1/4"}>22K/g</th>
@@ -79,7 +83,7 @@ function GoldPriceList(props) {
         return index < 2 ? (
           <GoldPriceRow
             key={price.day}
-            hightlight={"text-blue-500"}
+            hightlight={"text-blue-500 dark:text-yellow-300"}
             pricerow={price}
           />
         ) : (
@@ -96,7 +100,7 @@ function GoldPriceRow(props) {
     : `flex w-full py-1`;
 
   return (
-    <tr className={`${h} text-left`}>
+    <tr className={`dark:text-gray-300 ${h} text-left `}>
       <td className={"w-2/4"}>
         {props.pricerow?.day ? props.pricerow.day : "-"}
       </td>

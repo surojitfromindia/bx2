@@ -1,7 +1,10 @@
 import GoldPriceCard from "../Mini/GoldPrice";
 import SilverPriceCard from "../Mini/SilverPrice";
 import RecentlyCreatedBill from "../Mini/RecentlyCreatedBill";
-
+import {
+  ArrowCircleLeftIcon,
+  ArrowCircleRightIcon,
+} from "@heroicons/react/solid";
 export default function Home(props) {
   //props
   let infos = {
@@ -11,15 +14,39 @@ export default function Home(props) {
     mbc: 21,
     ybc: 80,
   };
+  const srcollByLeft = () => {
+    document
+      .getElementById("recard")
+      .scrollBy({ left: -50, behavior: "smooth" });
+  };
+  const srcollByRight = () => {
+    document
+      .getElementById("recard")
+      .scrollBy({ left: 50, behavior: "smooth" });
+  };
   return (
     <div className={"px-4 py-4 grid gap-3 "}>
-      <span className={"px-2 -mb-1 font-semibold text-gray-600"}>
+      <span className={" -mb-1 font-semibold text-gray-600 dark:text-gray-50"}>
         Recently Added
       </span>
-      <div className={"overflow-x-scroll "}>
+      <div id="recard" className={"relative overflow-x-auto no-scrollbar  "}>
         <RecentlyCreatedBill />
       </div>
-      <div className={"grid gap-3 sm:grid-cols-2"}>
+      <div className="hidden sm:flex justify-between -mt-9 z-10 pointer-events-none">
+        <span className={" pointer-events-auto  "}>
+          <ArrowCircleLeftIcon
+            onClick={srcollByLeft}
+            className={"w-12 h-12 dark:text-gray-50"}
+          />
+        </span>
+        <span className={" pointer-events-auto  "}>
+          <ArrowCircleRightIcon
+            onClick={srcollByRight}
+            className={"w-12 h-12 dark:text-gray-50"}
+          />
+        </span>
+      </div>
+      <div className={" grid gap-3 sm:grid-cols-2"}>
         <GoldPriceCard />
         <SilverPriceCard />
       </div>
