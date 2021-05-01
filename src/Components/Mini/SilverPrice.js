@@ -87,7 +87,11 @@ function SilverPriceList(props) {
             pricerow={price}
           />
         ) : (
-          <SilverPriceRow key={price.day} pricerow={price} />
+          <SilverPriceRow
+            hightlight={"text-gray-800 dark:text-gray-300"}
+            key={price.day}
+            pricerow={price}
+          />
         );
       })}
     </tbody>
@@ -100,7 +104,7 @@ function SilverPriceRow(props) {
     : `flex w-full py-1`;
 
   return (
-    <tr className={`dark:text-gray-300 ${h} text-left`}>
+    <tr className={`${h} text-left`}>
       <td className={"w-2/4"}>
         {props.pricerow?.day ? props.pricerow.day : "-"}
       </td>

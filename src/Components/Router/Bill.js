@@ -3,8 +3,6 @@ import { Link, useRouteMatch } from "react-router-dom";
 import BSI from "../Mini/CreateNewUserShortinfo";
 
 export default function Bills() {
-  //props
-  const { url } = useRouteMatch();
   let infos = {
     tbc: 3,
     yebc: 6,
