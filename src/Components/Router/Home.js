@@ -5,6 +5,7 @@ import {
   ArrowCircleLeftIcon,
   ArrowCircleRightIcon,
 } from "@heroicons/react/solid";
+import ShortCut from "../Mini/ShortCut";
 export default function Home({ de }) {
   const srcollByLeft = () => {
     document
@@ -26,18 +27,18 @@ export default function Home({ de }) {
           <span className={" pointer-events-auto  "}>
             <ArrowCircleLeftIcon
               onClick={srcollByLeft}
-              className={"w-6 h-6 text-lightBlue-500 dark:text-coolGray-200"}
+              className={"w-6 h-6 text-blue-500 dark:text-coolGray-200"}
             />
           </span>
           <span className={" pointer-events-auto  "}>
             <ArrowCircleRightIcon
               onClick={srcollByRight}
-              className={"w-6 h-6 text-lightBlue-500 dark:text-coolGray-200"}
+              className={"w-6 h-6 text-blue-500 dark:text-coolGray-200"}
             />
           </span>
         </div>
       </div>
-      <div id="recard" className={"relative overflow-x-auto no-scrollbar  "}>
+      <div id="recard" className={"relative overflow-x-auto no-scrollbar"}>
         <RecentlyCreatedBill list={de} />
       </div>
 
@@ -46,6 +47,7 @@ export default function Home({ de }) {
       >
         <GoldPriceCard />
         <SilverPriceCard />
+        <ShortCut />
       </div>
     </div>
   );

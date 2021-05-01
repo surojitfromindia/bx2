@@ -29,12 +29,14 @@ export default function PriceSelect({ price, onItemTypeSelect, isAutoPrice }) {
         id="select"
         value={selectvalue}
         className={
-          "uppercase rounded-sm px-4 py-3  focus:outline-none bg-gray-300"
+          "uppercase rounded-sm px-4 py-3  focus:outline-none bg-gray-300 dark:bg-coolGray-800"
         }
         placeholder="Type"
       />
       <select
-        className={"bg-blue-600  px-2  text-white "}
+        className={
+          "bg-blue-600 dark:bg-lightBlue-500  px-2  text-white "
+        }
         name="items"
         id="itemsid"
         onChange={handleSelectedOptionChange}
