@@ -1,4 +1,4 @@
-import React, { useState, useEffect,  } from "react";
+import React, { useState, useEffect } from "react";
 import SearchBox from "../SuperMini/SearchBox";
 import BillItems from "../SuperMini/BillItems";
 import LoadingComp from "./LoadingComp";
@@ -8,8 +8,10 @@ let globalid;
 export default function BillList({ list }) {
   const [billlist, setbilllis] = useState(list);
   const [seachFillterList, setseachFillterList] = useState([]);
+  const [sortOrder, setSortOrder] = useState("Asc");
   const [isLoading, setIsLoading] = useState(true);
   const [errortext, setErrorText] = useState("");
+  const [searchText, setSearchtext] = useState("");
   useEffect(async () => {
     let mounted = true;
     try {
@@ -38,13 +40,24 @@ export default function BillList({ list }) {
     };
   });
 
-  const onSearch = (searchedText) => {
-    let m = searchedText.toUpperCase();
+  //search and sort
+  useEffect(() => {
+    let temp = [];
     let fillterdList = billlist.filter((info) =>
-      info.customer_name.toUpperCase().startsWith(m)
+      info.customer_name.toUpperCase().startsWith(searchText)
     );
-    if (m !== "") setseachFillterList([...fillterdList]);
-    else setseachFillterList([]);
+    if (searchText !== "") {
+      temp = fillterdList;
+    }
+    if (sortOrder === "Asc") {
+      setseachFillterList([...temp]);
+    } else {
+      setseachFillterList([...temp.reverse()]);
+    }
+  }, [searchText, sortOrder]);
+
+  const onSearch = (searchedText) => {
+    setSearchtext(searchedText.toUpperCase());
   };
 
   const onSeachedItemClick = (idToScroll) => {
@@ -58,6 +71,10 @@ export default function BillList({ list }) {
   const onCardItemViewClick = (id) => {
     globalid = id;
   };
+
+  const Sort = (order) => {
+    setSortOrder(order);
+  };
   return (
     <div>
       {isLoading ? (
@@ -66,11 +83,12 @@ export default function BillList({ list }) {
         </div>
       ) : (
         <div>
-          <div className={"sticky  top-0  md:mx-14 lg:mx-48"}>
+          <div className={"sticky top-0  md:mx-14 md:mt-5 lg:mx-48"}>
             <SearchBox
               billlist={seachFillterList}
               onSearch={onSearch}
               onClick={onSeachedItemClick}
+              onSort={Sort}
             />
           </div>
           <div
@@ -92,5 +110,3 @@ export default function BillList({ list }) {
     </div>
   );
 }
-
-

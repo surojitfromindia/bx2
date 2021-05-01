@@ -21,7 +21,7 @@ export default function SuperMini({ details, onClick }) {
         </span>
         <span
           className={
-            "group-hover:text-red-600 dark:group-hover:text-yellow-300 text-xs ml-1.5 text-gray-600  font-bold"
+            "group-hover:text-red-600 dark:group-hover:text-yellow-300 text-xs ml-1.5 text-gray-600 font-bold"
           }
         >
           {details.item_details.name
@@ -29,10 +29,10 @@ export default function SuperMini({ details, onClick }) {
             : ""}
         </span>
       </p>
-      <div className={"flex  gap-1 items-center"}>
+      <div className={"flex gap-1 items-center"}>
         <p className={"text-xs"}>
           <span
-            className={`px-1 py-0.5  rounded-tr-sm rounded-br-sm ${
+            className={`px-1 py-0.5  rounded-l-sm rounded-r-sm  ${
               details.payment.status === "paid"
                 ? "text-green-700  font-medium  bg-green-300 "
                 : "text-red-700 font-medium  bg-red-300 "
@@ -57,7 +57,7 @@ export default function SuperMini({ details, onClick }) {
             {`${moment.utc(details?.bill_date).format("DD-MM-YYYY")}`}
           </span>
         </p>
-        <p className={"text-xs flex flex-row"}>
+        <p className={"text-xs flex flex-row "}>
           <span
             className={
               " hidden sm:block px-1.5  py-0.5 rounded-tl-sm rounded-bl-sm text-white  bg-gray-500 "
@@ -67,7 +67,7 @@ export default function SuperMini({ details, onClick }) {
           </span>
           <span
             className={
-              "px-1.5 py-0.5  rounded-tr-sm rounded-br-sm  text-pink-700 font-medium bg-pink-300 "
+              "px-1.5 py-0.5 rounded-l-sm rounded-r-sm sm:rounded-l-none text-pink-700 font-medium bg-pink-300 "
             }
           >
             {`${moment
