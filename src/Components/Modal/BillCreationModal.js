@@ -31,7 +31,7 @@ export default function BillCreationModal({
   };
   return (
     <div
-      className={`bg-gray-800 bg-opacity-70 shadow-lg flex justify-center fixed top-0 bottom-0 left-0 right-0 z-10 ${showhideClassName}`}
+      className={`bg-gray-800 bg-opacity-70 shadow-lg flex justify-center fixed top-0 bottom-0 left-0 right-0 z-20 ${showhideClassName}`}
     >
       <section
         className={

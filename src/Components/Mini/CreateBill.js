@@ -212,13 +212,15 @@ export default function CreateBill({ onNewEntry }) {
       {/* Form Body */}
       <div className={"flex flex-col gap-5  mt-1 mb-20 md:grid md:grid-cols-2"}>
         <div
-          className={"flex flex-col shadow-md bg-gray-100 px-2 py-4 rounded-md"}
+          className={
+            "flex flex-col shadow-md bg-gray-100 dark:bg-coolGray-700 dark:text-gray-50 px-2 py-4 rounded-md"
+          }
         >
           {/*Action Row */}
           <div className={"flex flex-row  justify-between "}>
             <a
               className={
-                "cursor-pointer hover:underline text-xl font-semibold text-blue-600"
+                "cursor-pointer hover:underline text-xl font-semibold text-blue-500 dark:text-lightBlue-400"
               }
               onClick={handleback}
             >
@@ -230,7 +232,9 @@ export default function CreateBill({ onNewEntry }) {
                 type={"checkbox"}
                 checked={isAutoPrice ? true : false}
                 onChange={handleOnAutoPriceToggle}
-                className={"form-checkbox mr-2 text-blue-600"}
+                className={
+                  "form-checkbox mr-2 text-blue-600 dark:text-lightBlue-500"
+                }
               />
               <label htmlFor="autoprice">Auto Price</label>
             </div>
@@ -243,7 +247,7 @@ export default function CreateBill({ onNewEntry }) {
                 type="text"
                 id="customer_name"
                 className={
-                  "uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
+                  "uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 dark:bg-coolGray-800 w-full "
                 }
                 placeholder="Customer Name"
               />
@@ -254,7 +258,7 @@ export default function CreateBill({ onNewEntry }) {
                 type={"text"}
                 id="customer_contact"
                 className={
-                  "uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
+                  "uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 dark:bg-coolGray-800 w-full"
                 }
                 placeholder="Contact"
               />
@@ -268,7 +272,7 @@ export default function CreateBill({ onNewEntry }) {
                 type="text"
                 id="item_name"
                 className={
-                  "uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
+                  "uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 dark:bg-coolGray-800 w-full"
                 }
                 placeholder="Item Name"
               />
@@ -315,7 +319,7 @@ const DepositeCom = ({ onNewDepositeChange }) => {
   return (
     <div
       className={
-        " flex flex-col gap-3 w-full bg-gray-100 shadow-md rounded-md px-2 py-4 "
+        " flex flex-col gap-3 w-full dark:bg-coolGray-700 dark:text-gray-50 bg-gray-100 shadow-md rounded-md px-2 py-4 "
       }
     >
       <p className={"text-xl font-semibold"}>Deposite Box</p>
@@ -325,7 +329,7 @@ const DepositeCom = ({ onNewDepositeChange }) => {
           <select
             onChange={handleChange}
             className={
-              "appearance-none bg-blue-600 form-select px-4 py-3  mt-1 text-white text-center"
+              "appearance-none bg-blue-600 dark:bg-lightBlue-500 form-select px-4 py-3  mt-1 text-white text-center"
             }
             name="items"
             id="depunit"
@@ -381,7 +385,7 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
   return (
     <div
       className={
-        "flex flex-col gap-3 w-full bg-gray-100 rounded-md shadow-md px-2 py-4 "
+        "flex flex-col gap-3 w-full bg-gray-100 dark:text-gray-50 dark:bg-coolGray-700 rounded-md shadow-md px-2 py-4 "
       }
     >
       <div
@@ -389,7 +393,9 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
           "md:flex md:flex-row md:justify-between md:items-baseline md:gap-2"
         }
       >
-        <p className={"text-xl md:text-base font-semibold"}>Price Box</p>
+        <p className={"text-xl md:text-base dark:text-gray-50 font-semibold"}>
+          Price Box
+        </p>
         <p className={"text-xl md:text-base  text-pink-500 font-bold"}>
           {calText}
         </p>
@@ -399,7 +405,7 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
           <label htmlFor="select">Select unit</label>
           <select
             className={
-              "appearance-none bg-blue-600 form-select px-4 py-3  mt-1 text-white text-center"
+              "appearance-none bg-blue-600 dark:bg-lightBlue-500 form-select px-4 py-3  mt-1 text-white text-center"
             }
             onChange={onInputChange}
             name="unitoncal"
@@ -420,7 +426,7 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
             type="number"
             min={0}
             className={
-              " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
+              " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 dark:bg-coolGray-800 w-full"
             }
             placeholder="Quan"
           />
@@ -428,7 +434,9 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
         <div className={"flex flex-col w-3/5"}>
           <label
             htmlFor="item"
-            className={"text-right font-bold text-blue-600"}
+            className={
+              "text-right font-medium text-blue-600 dark:text-lightBlue-500"
+            }
           >
             Billing Price
           </label>
@@ -437,7 +445,7 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
             value={pricemodel.price.value}
             readOnly={true}
             className={
-              " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
+              " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 dark:bg-coolGray-800 w-full"
             }
             placeholder="Quantity"
           />
@@ -453,7 +461,7 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
             type="number"
             min={0}
             className={
-              " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 w-full"
+              " uppercase rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-300 dark:bg-coolGray-800 w-full"
             }
             placeholder="Making Charge"
           />
@@ -463,7 +471,7 @@ const TotalQCal = ({ pricemodel, calText, onreqNewPrice }) => {
           <label
             name="gst"
             className={
-              "border rounded-sm px-4 py-3 mt-1 bg-gray-300 border-gray-500 w-full"
+              "border rounded-sm px-4 py-3 mt-1 bg-gray-300 dark:bg-coolGray-800 border-gray-500 w-full"
             }
           >
             {pricemodel.price.gst}

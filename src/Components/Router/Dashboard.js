@@ -5,23 +5,39 @@ import {
   Redirect,
   useLocation,
 } from "react-router-dom";
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Home from "./Home";
 import Bills from "./Bill";
 import CreateBill from "../Mini/CreateBill";
 import BillList from "../Mini/BillList";
 import SingleBill from "../Mini/SingleBill";
-import { MenuIcon, BellIcon, MinusCircleIcon } from "@heroicons/react/solid";
+import {
+  MenuIcon,
+  BellIcon,
+  MinusCircleIcon,
+  PlusIcon,
+} from "@heroicons/react/solid";
 import NotificationComp from "../Notification/NotificationComp";
 import ColorModeT from "../Mini/ColorModeT";
 import { toggleTheme } from "../../Hooks/useTheme";
 import { GetMiniBills, GetMiniBillsBy } from "../../Controllers/Bill";
+import AddShortCutModal from "../Modal/AddShortCutModal";
 export default function Dashboard() {
   const [showMenu, setShowMenu] = useState(false);
   const [isHeaderDisplay, setIsHeaderDisplay] = useState(true);
   const [showNotification, setShowNotification] = useState(false);
+  const [showShortCutCreatModal, setShowShortCutCreatModal] = useState(false);
   const path = useLocation();
   const [list, setlist] = useState([]);
+  const [linkRes, setLinkRes] = useState("");
+  const [shorcutList, setShorcutList] = useState([]);
+
+  //set up shortcut links
+  useEffect(() => {
+    let getListOfShortCut = localStorage.getItem("slinks");
+    let listoflink = JSON.parse(getListOfShortCut);
+    if (Array.isArray(linkRes)) setShorcutList([...listoflink]);
+  }, [linkRes]);
 
   //make header not to stick if it is in /bill/billist
   useEffect(() => {
@@ -46,7 +62,6 @@ export default function Dashboard() {
       setlist([...updatedArry]);
     });
   };
-
   const handleDelete = (id) => {
     let updatedArry = list.filter((item) => item._id !== id);
     console.log(updatedArry);
@@ -56,7 +71,6 @@ export default function Dashboard() {
     let minibills = await GetMiniBills();
     setlist(minibills);
   };
-
   const handleHideAndShow = () => {
     setShowMenu(!showMenu);
   };
@@ -66,21 +80,49 @@ export default function Dashboard() {
   const ToggleNotification = () => {
     setShowNotification((t) => !t);
   };
+  const ToggleSCreation = () => {
+    setShowShortCutCreatModal((t) => !t);
+    setLinkRes("");
+  };
+  const AddShortCut = (linkObject) => {
+    let k = JSON.parse(localStorage.getItem("slinks"));
+    if (!Array.isArray(k)) {
+      let b = [];
+      b.push(linkObject);
+      localStorage.setItem("slinks", JSON.stringify(b));
+      setLinkRes(true);
+    } else {
+      let b = JSON.parse(localStorage.getItem("slinks"));
+      if (b.includes(linkObject)) setLinkRes(false);
+      else {
+        b.push(linkObject);
+        localStorage.setItem("slinks", JSON.stringify(b));
+        setLinkRes(true);
+      }
+    }
+  };
 
   return (
     <div className={"transition-colors duration-300 ease-in-out flex flex-col"}>
       <div
         className={`p-4 ${
           isHeaderDisplay ? "sticky top-0" : ""
-        }  z-20 text-gray-100 bg-coolGray-700`}
+        }  z-10 text-gray-100 bg-coolGray-700`}
       >
         <div className={"flex justify-between items-center"}>
           <div>
-            <h1>Welcome Surojit</h1>
+            <h1
+              className={
+                "text-lg font-semibold tracking-widest text-trueGray-100"
+              }
+            >
+              BX2
+            </h1>
           </div>
           <div
             className={"flex-shrink-0 flex justify-between gap-3 items-center"}
           >
+            <PlusIcon onClick={ToggleSCreation} className={"w-6 h-6"} />
             <ColorModeT onTog={ToggleColorMode} />
             <div onClick={ToggleNotification} className={"relative"}>
               <BellIcon className={"w-6 h-6"} />
@@ -97,8 +139,8 @@ export default function Dashboard() {
           </div>
         </div>
         <div
-          className={`transition-all duration-300 ease-in-out transform ${
-            showMenu ? "max-h-12 " : "max-h-0"
+          className={`transition-height duration-400 ease-in-out transform ${
+            showMenu ? "h-12 " : "h-0"
           }  overflow-hidden`}
         >
           <div className={"flex justify-between text-md"}>
@@ -156,7 +198,7 @@ export default function Dashboard() {
       </div>
 
       <div
-        className={`z-30 transition-transform duration-300 ease-in-out flex flex-col items-center justify-between px-3 py-4 fixed top-20 bottom-20 left-5 right-5 sm:left-44 sm:right-44 
+        className={`transition-transform duration-300 ease-in-out flex flex-col items-center justify-between px-3 py-4 fixed top-20 bottom-20 left-5 right-5 sm:left-44 sm:right-44 
         transform ${
           showNotification ? "scale-100" : "scale-0"
         } rounded-md border-2 border-blue-300 dark:border-gray-200 bg-blue-500  dark:bg-gray-700  `}
@@ -170,6 +212,19 @@ export default function Dashboard() {
         >
           <MinusCircleIcon className={"object-fill text-gray-50 h-6 w-6"} />
         </div>
+      </div>
+
+      <div
+        className={`z-30 flex flex-col items-center justify-center  fixed top-0 bottom-0 left-0 right-0
+        transition-transform ease-in-ou duration-300  transform ${
+          showShortCutCreatModal ? "scale-100" : "scale-0"
+        }  `}
+      >
+        <AddShortCutModal
+          ToggleSCreation={ToggleSCreation}
+          linkRes={linkRes}
+          AddShortCut={AddShortCut}
+        />
       </div>
     </div>
   );
